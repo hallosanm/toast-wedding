@@ -8,28 +8,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=ZCOOL+KuaiLe&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fdfbf7;
-            --card-bg: rgba(255, 255, 255, 0.92);
+            --bg-color: #F3ECE0; /* 纯色暖燕麦底色 */
+            --card-bg: #FFFFFF;  /* 纯白照片卡片 */
             --accent-gold: #c69c59;
             --accent-rose: #d88a8a;
             --text-dark: #3a322c;
             --text-muted: #8c786a;
-            --border-color: #e8dccb;
+            --border-color: #e2d3c1;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
 
-        body, html { height: 100%; overflow: hidden; background-color: #f4ede2; color: var(--text-dark); font-family: 'Noto Serif SC', 'Georgia', serif; }
+        body, html { height: 100%; overflow: hidden; background-color: var(--bg-color); color: var(--text-dark); font-family: 'Noto Serif SC', 'Georgia', serif; }
 
+        /* 纯色背景层 */
         .bg-cover-art {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, #ffffff 0%, #f9f2e7 40%, #f3e5d3 75%, #e9d7c0 100%);
+            background-color: var(--bg-color);
             z-index: 0; pointer-events: none;
         }
 
         .music-btn {
             position: fixed; top: 20px; right: 20px; width: 38px; height: 38px;
-            border-radius: 50%; background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%; background: rgba(255, 255, 255, 0.95);
             border: 1px solid var(--accent-gold); color: var(--accent-gold);
             display: flex; justify-content: center; align-items: center;
             z-index: 100; cursor: pointer; font-size: 15px;
@@ -71,17 +72,10 @@
         .couple-names { font-size: 16px; letter-spacing: 3px; color: var(--accent-gold); margin-bottom: 6px; font-weight: 600; }
         .invitation-quote { font-size: 15px; letter-spacing: 2px; color: var(--text-dark); margin-bottom: 25px; font-weight: 600; }
 
-        .btn-start {
-            background: linear-gradient(135deg, #ffffff 0%, #fdf5ff 100%);
-            border: 1.5px solid rgba(255, 255, 255, 0.9); color: #4a3e35;
-            padding: 12px 32px; font-size: 14px; letter-spacing: 3px; border-radius: 30px;
-            cursor: pointer; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25); font-weight: 700;
-        }
-
-        /* 幻灯片主体卡片 */
+        /* 纯白卡片凸显层次感 */
         .quad-card {
             width: 100%; background: var(--card-bg); border: 1px solid var(--border-color);
-            border-radius: 16px; padding: 18px; box-shadow: 0 10px 30px rgba(140, 120, 106, 0.12);
+            border-radius: 16px; padding: 18px; box-shadow: 0 12px 32px rgba(120, 100, 80, 0.15);
             display: flex; flex-direction: column; align-items: center; text-align: center;
         }
 
@@ -108,7 +102,7 @@
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-5px); } }
 
         /* 结尾信息页 */
-        .ending-scroll-page { height: auto; min-height: 100vh; padding: 40px 20px; background: rgba(253, 251, 247, 0.95); }
+        .ending-scroll-page { height: auto; min-height: 100vh; padding: 40px 20px; background: var(--bg-color); }
         .ticket-box {
             background: linear-gradient(135deg, #ffffff 0%, #fbf6ee 100%);
             border: 1px dashed var(--accent-gold); border-radius: 12px; padding: 20px;
@@ -130,7 +124,7 @@
         .form-input, .form-select { width: 100%; padding: 10px; background: #fff; border: 1px solid var(--border-color); border-radius: 6px; font-size: 12.5px; outline: none; }
         .btn-submit { width: 100%; padding: 11px; background: var(--accent-gold); border: none; border-radius: 6px; color: #fff; font-weight: 600; font-size: 13px; cursor: pointer; margin-top: 6px; }
 
-        .bullet-container { height: 60px; background: rgba(255,255,255,0.7); border-radius: 6px; overflow: hidden; position: relative; margin-top: 15px; border: 1px solid var(--border-color); }
+        .bullet-container { height: 60px; background: rgba(255,255,255,0.85); border-radius: 6px; overflow: hidden; position: relative; margin-top: 15px; border: 1px solid var(--border-color); }
         .bullet-item { position: absolute; white-space: nowrap; color: var(--accent-gold); font-size: 12px; animation: bullet 8s linear infinite; }
         @keyframes bullet { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
@@ -309,7 +303,6 @@
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
 
-        // 触摸页面自动播放音乐（兼容 iOS/微信）
         document.body.addEventListener('touchstart', function() {
             if (bgm.paused) {
                 bgm.play().then(() => musicBtn.classList.add('playing')).catch(e => console.log(e));
@@ -326,7 +319,6 @@
             }
         }
 
-        // 监听相册左右滑动，联动底部圆点指示器
         document.querySelectorAll('.carousel-box').forEach((box) => {
             box.addEventListener('scroll', () => {
                 const index = Math.round(box.scrollLeft / box.clientWidth);
