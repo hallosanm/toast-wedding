@@ -3,660 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>“爱·很简单” 婚礼邀请函 - 葛思远 & 方紫瑜</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=ZCOOL+KuaiLe&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex, nofollow">
+    <title>我们结婚啦 - 婚礼请柬</title>
     <style>
-        :root {
-            --bg-color: #fdfbf7;
-            --card-bg: rgba(255, 255, 255, 0.88);
-            --accent-gold: #c69c59;
-            --accent-rose: #d88a8a;
-            --text-dark: #3a322c;
-            --text-muted: #8c786a;
-            --border-color: #e8dccb;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #f4ede2;
-            color: var(--text-dark);
-            font-family: 'Noto Serif SC', 'Georgia', serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .bg-cover-art {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, #ffffff 0%, #f9f2e7 40%, #f3e5d3 75%, #e9d7c0 100%);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .bg-pattern {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.22;
-            background-image: radial-gradient(var(--accent-gold) 0.6px, transparent 0.6px), radial-gradient(var(--accent-gold) 0.6px, #f7eee1 0.6px);
-            background-size: 24px 24px;
-            background-position: 0 0, 12px 12px;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 430px;
-            height: 100vh;
-            max-height: 932px;
-            background-color: transparent;
-            position: relative;
-            overflow-y: auto;
-            overflow-x: hidden;
-            box-shadow: 0 10px 40px rgba(140, 120, 106, 0.15);
-            scroll-behavior: smooth;
-            z-index: 1;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { height: 100%; overflow: hidden; background: #FAF8F5; font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+        
         .music-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            cursor: pointer;
-            font-size: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            backdrop-filter: blur(6px);
+            position: fixed; top: 20px; right: 20px; z-index: 999;
+            width: 36px; height: 36px; background: rgba(255,255,255,0.8);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            animation: spin 4s linear infinite; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-size: 18px; cursor: pointer;
         }
-
-        .music-btn.playing {
-            animation: spin 4s linear infinite;
-        }
-
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-
-        .screen-intro {
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .container {
             height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .container::-webkit-scrollbar { display: none; }
+        
+        .page {
+            height: 100vh;
+            width: 100vw;
+            scroll-snap-align: start;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px 20px;
-            text-align: center;
             position: relative;
+            padding: 20px;
         }
-
-        .vinyl-record-card {
-            width: 260px;
-            height: 260px;
-            border-radius: 50%;
-            border: 6px solid #ffffff;
-            overflow: hidden;
-            margin-bottom: 25px;
-            box-shadow: 0 18px 40px rgba(198, 156, 89, 0.28), 0 0 0 1px var(--accent-gold);
-            animation: rotateVinyl 20s linear infinite;
-            position: relative;
-        }
-
-        .vinyl-record-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .vinyl-record-card::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 30px; height: 30px;
-            background: #ffffff;
-            border: 4px solid var(--accent-gold);
-            border-radius: 50%;
-            box-shadow: 0 0 8px rgba(0,0,0,0.2);
-        }
-
-        @keyframes rotateVinyl {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .film-title-cn {
-            font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
-            font-size: 29px;
-            letter-spacing: 3px;
-            color: var(--accent-gold);
-            line-height: 1.3;
-            font-weight: 400;
-        }
-
-        .film-title-sub {
-            font-family: 'Cinzel Decorative', 'Noto Serif SC', serif;
-            font-size: 32px;
-            letter-spacing: 8px;
-            color: var(--text-dark);
-            margin-top: 6px;
-            margin-bottom: 16px;
-            font-weight: 900;
-            text-shadow: 0 2px 4px rgba(198, 156, 89, 0.15);
-        }
-
-        .couple-names {
-            font-size: 16px;
-            letter-spacing: 3px;
-            color: var(--accent-gold);
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .invitation-quote {
-            font-size: 16px;
-            letter-spacing: 2px;
-            color: var(--text-dark);
-            margin-bottom: 28px;
-            font-weight: 600;
-        }
-
-        .btn-start {
-            position: relative;
-            background: linear-gradient(135deg, #ffffff 0%, #f3f8fe 25%, #e1f0ff 50%, #fdf5ff 75%, #ffffff 100%);
-            background-size: 200% 200%;
-            border: 1.5px solid rgba(255, 255, 255, 0.9);
-            color: #4a3e35;
-            padding: 14px 36px;
-            font-size: 15px;
-            letter-spacing: 3px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25), 
-                        0 2px 10px rgba(255, 255, 255, 0.8) inset,
-                        0 -2px 10px rgba(198, 156, 89, 0.2) inset;
-            font-weight: 700;
-            overflow: hidden;
-            animation: diamondGlow 4s ease infinite;
-        }
-
-        .btn-start::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -60%;
-            width: 50%; height: 200%;
-            background: linear-gradient(
-                60deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.2) 30%, 
-                rgba(255, 255, 255, 0.95) 50%, 
-                rgba(255, 255, 255, 0.2) 70%, 
-                transparent 100%
-            );
-            transform: rotate(25deg);
-            animation: diamondShine 3s infinite;
-        }
-
-        @keyframes diamondGlow {
-            0%, 100% {
-                background-position: 0% 50%;
-                box-shadow: 0 8px 25px rgba(198, 156, 89, 0.25), 0 0 15px rgba(255, 255, 255, 0.8);
-            }
-            50% {
-                background-position: 100% 50%;
-                box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4), 0 0 25px rgba(255, 255, 255, 1);
-            }
-        }
-
-        @keyframes diamondShine {
-            0% { left: -60%; }
-            30%, 100% { left: 140%; }
-        }
-
-        .btn-start:active {
-            transform: scale(0.97);
-            box-shadow: 0 4px 15px rgba(198, 156, 89, 0.3);
-        }
-
-        .section-block {
-            padding: 40px 20px;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(253, 251, 247, 0.85);
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .section-tag {
-            font-family: 'Cinzel Decorative', 'Cinzel', serif;
-            font-size: 11px;
-            letter-spacing: 2px;
-            color: var(--accent-gold);
-            text-transform: uppercase;
-        }
-
-        .section-title {
-            font-size: 20px;
-            letter-spacing: 3px;
-            margin-top: 5px;
-            color: var(--text-dark);
-        }
-
-        .gallery-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+        
+        .page img {
+            max-width: 100%;
+            max-height: 72vh;
+            object-fit: contain;
             border-radius: 12px;
-            padding: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(140, 120, 106, 0.08);
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 0.2s;
         }
-
-        .gallery-img-wrapper {
-            position: relative;
-            width: 100%;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .gallery-img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 6px;
-        }
-
-        .gallery-caption {
-            margin-top: 12px;
+        
+        .text-box {
             text-align: center;
+            color: #5d4a44;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 0.5s;
         }
-
-        .gallery-act {
-            font-family: 'Cinzel Decorative', 'Cinzel', serif;
-            font-size: 11px;
-            color: var(--accent-gold);
-            letter-spacing: 1px;
+        .text-box h3 { font-weight: 400; font-size: 1.2rem; letter-spacing: 3px; line-height: 1.5; }
+        
+        .ending-page { background: #fdfbf7; }
+        .ending-page img { max-height: 60vh; border-radius: 8px; margin-bottom: 30px; }
+        .ending-text { text-align: center; color: #4a4a4a; }
+        .ending-text h1 { font-family: 'Georgia', serif; font-size: 2.2rem; color: #b76e79; margin-bottom: 15px; letter-spacing: 2px;}
+        .ending-text p { font-size: 1rem; line-height: 1.8; letter-spacing: 2px; color: #666; }
+        
+        .swipe-up-icon {
+            position: absolute; bottom: 3vh; left: 50%;
+            width: 20px; height: 20px; 
+            border-left: 2px solid #b76e79; border-bottom: 2px solid #b76e79;
+            transform: translateX(-50%) rotate(-45deg); 
+            animation: bounce 2s infinite;
         }
-
-        .gallery-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 4px;
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .ticket-box {
-            background: linear-gradient(135deg, #ffffff 0%, #fbf6ee 100%);
-            border: 1px dashed var(--accent-gold);
-            border-radius: 12px;
-            padding: 22px;
-            position: relative;
-            box-shadow: 0 8px 25px rgba(198, 156, 89, 0.1);
-        }
-
-        .ticket-head {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .ticket-title {
-            font-family: 'Cinzel Decorative', 'Cinzel', serif;
-            font-size: 14px;
-            color: var(--accent-gold);
-            font-weight: 700;
-        }
-
-        .ticket-date-badge {
-            font-size: 12px;
-            color: #ffffff;
-            background: var(--accent-gold);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .ticket-row {
-            margin-bottom: 10px;
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--text-dark);
-        }
-
-        .ticket-label {
-            color: var(--text-muted);
-            margin-right: 6px;
-        }
-
-        .action-btns {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn-action {
-            flex: 1;
-            padding: 11px 0;
-            text-align: center;
-            border-radius: 6px;
-            font-size: 12px;
-            letter-spacing: 1px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--accent-gold);
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .btn-secondary {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            color: var(--text-dark);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .form-input, .form-select {
-            width: 100%;
-            padding: 11px 12px;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-dark);
-            font-family: inherit;
-            font-size: 13px;
-            outline: none;
-        }
-
-        .form-input:focus, .form-select:focus {
-            border-color: var(--accent-gold);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 12px;
-            background: var(--accent-gold);
-            border: none;
-            border-radius: 6px;
-            color: #ffffff;
-            font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 2px;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(198, 156, 89, 0.25);
-        }
-
-        .bullet-container {
-            height: 80px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 6px;
-            overflow: hidden;
-            position: relative;
-            margin-top: 15px;
-            border: 1px solid var(--border-color);
-        }
-
-        .bullet-item {
-            position: absolute;
-            white-space: nowrap;
-            color: var(--accent-gold);
-            font-size: 12px;
-            animation: bullet 8s linear infinite;
-        }
-
-        @keyframes bullet {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        .footer-credits {
-            text-align: center;
-            padding: 30px 20px;
-            font-size: 11px;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            line-height: 1.8;
-            background: rgba(247, 238, 225, 0.9);
+        @keyframes bounce { 
+            0%, 20%, 50%, 80%, 100% { bottom: 3vh; } 
+            40% { bottom: 4.5vh; } 
+            60% { bottom: 3.8vh; } 
         }
     </style>
 </head>
 <body>
+    <div class="music-btn" id="musicBtn">🎵</div>
+    <audio id="bgm" src="爱很简单.mp3" loop autoplay></audio>
 
-    <div class="bg-cover-art"></div>
-    <div class="bg-pattern"></div>
-
-    <audio id="bgm" loop preload="auto">
-        <source src="爱很简单.mp3" type="audio/mpeg">
-    </audio>
-
-    <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
-
-    <div class="app-container">
-        
-        <!-- INTRO SCREEN -->
-        <section class="screen-intro" id="introScreen">
-            <div class="vinyl-record-card">
-                <img src="爱很简单.jpeg" alt="爱·很简单 唱片封面" onerror="this.src='https://via.placeholder.com/260/f7eee1/c69c59?text=Love'">
-            </div>
-            
-            <div class="film-title-cn">“爱·很简单”</div>
-            <div class="film-title-sub">婚礼邀请函</div>
-            <div class="couple-names">葛思远 · 方紫瑜</div>
-            <div class="invitation-quote">诚挚邀请您来参加我们的婚礼！</div>
-
-            <button class="btn-start" onclick="startFilm()">开启浪漫旅程 ✦</button>
-        </section>
-
-        <!-- MAIN CONTENT -->
-        <div id="mainContent" style="display: none;">
-            
-            <section class="section-block">
-                <div class="section-header">
-                    <span class="section-tag">ACT I - III</span>
-                    <h2 class="section-title">光影剧场 · 佳偶天成</h2>
-                </div>
-
-                <div class="gallery-card">
-                    <div class="gallery-img-wrapper">
-                        <img src="0N2A5981.jpg" alt="葛思远与方紫瑜 - 黑领结复古草帽" class="gallery-img" onerror="this.src='https://via.placeholder.com/400x550/f7eee1/c69c59?text=0N2A5981.jpg'">
-                    </div>
-                    <div class="gallery-caption">
-                        <div class="gallery-act">ACT I · BLACK TIE & STRAW HAT</div>
-                        <div class="gallery-desc">“择一人终老，共赴岁月长河。”</div>
-                    </div>
-                </div>
-
-                <div class="gallery-card">
-                    <div class="gallery-img-wrapper">
-                        <img src="0N2A5935.jpg" alt="葛思远与方紫瑜 - 明制汉服凤冠霞帔" class="gallery-img" onerror="this.src='https://via.placeholder.com/400x550/f7eee1/c69c59?text=0N2A5935.jpg'">
-                    </div>
-                    <div class="gallery-caption">
-                        <div class="gallery-act">ACT II · ORIENTAL CLASSIC</div>
-                        <div class="gallery-desc">“凤冠霞帔，喜结连理；执子之手，与子偕老。”</div>
-                    </div>
-                </div>
-
-                <div class="gallery-card">
-                    <div class="gallery-img-wrapper">
-                        <img src="0N2A5957.jpg" alt="葛思远与方紫瑜 - 秘境花园刺绣礼服" class="gallery-img" onerror="this.src='https://via.placeholder.com/400x550/f7eee1/c69c59?text=0N2A5957.jpg'">
-                    </div>
-                    <div class="gallery-caption">
-                        <div class="gallery-act">ACT III · SECRET GARDEN</div>
-                        <div class="gallery-desc">“蝴蝶翩跹，阳光倾泻，定格最纯粹的浪漫。”</div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section-block">
-                <div class="section-header">
-                    <span class="section-tag">PREMIER TICKET</span>
-                    <h2 class="section-title">首映礼观影门票</h2>
-                </div>
-
-                <div class="ticket-box">
-                    <div class="ticket-head">
-                        <div class="ticket-title">ADMIT ONE ✦ 婚礼门票</div>
-                        <div class="ticket-date-badge">2026.09.19</div>
-                    </div>
-
-                    <div class="ticket-row"><span class="ticket-label">新郎 GROOM:</span> 葛思远</div>
-                    <div class="ticket-row"><span class="ticket-label">新娘 BRIDE:</span> 方紫瑜</div>
-                    <div class="ticket-row"><span class="ticket-label">吉时 TIME:</span> 2026年9月19日 11:38</div>
-                    <div class="ticket-row"><span class="ticket-label">地点 VENUE:</span> 肥东希尔顿欢朋酒店-亚特兰蒂斯厅</div>
-                    <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> 安徽省肥东县长江东路与金阳路交叉口（地铁2号线桂王站A口出）</div>
-
-                    <div class="action-btns">
-                        <a class="btn-action btn-primary" onclick="openMap()">📍 一键地图导航</a>
-                        <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section-block">
-                <div class="section-header">
-                    <span class="section-tag">RSVP SELECTION</span>
-                    <h2 class="section-title">嘉宾出席确认</h2>
-                </div>
-
-                <form id="rsvpForm" onsubmit="submitRSVP(event)">
-                    <div class="form-group">
-                        <label class="form-label">您的尊姓名</label>
-                        <input type="text" class="form-input" placeholder="请输入您的姓名" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">是否出席婚礼</label>
-                        <select class="form-select">
-                            <option value="yes">荣耀出席 ✦ 共同见证</option>
-                            <option value="no">遗憾缺席 ✦ 远方祝福</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">出席人数 (含儿童)</label>
-                        <select class="form-select">
-                            <option value="1">1 人</option>
-                            <option value="2">2 人</option>
-                            <option value="3">3 人及以上</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">寄语 / 祝福</label>
-                        <input type="text" id="wishInput" class="form-input" placeholder="写下给思远与紫瑜的祝福吧...">
-                    </div>
-
-                    <button type="submit" class="btn-submit">确认提交并生成专属纪念票</button>
-                </form>
-
-                <div class="bullet-container" id="bulletBox">
-                    <div class="bullet-item" style="top: 15px; animation-delay: 0s;">祝思远与紫瑜百年好合，新婚快乐！</div>
-                    <div class="bullet-item" style="top: 45px; animation-delay: 3s;">期待9月19日的经典首映礼！🎉</div>
-                </div>
-            </section>
-
-            <div class="footer-credits">
-                ✦ SPECIAL THANKS TO ALL OUR FAMILY & FRIENDS ✦<br>
-                葛思远 & 方紫瑜 婚礼放映室<br>
-                2026.09.19
-            </div>
-
+    <div class="container">
+        <!-- 第一组：中式红妆 -->
+        <div class="page">
+            <img src="0N2A5901.jpg" alt="新郎">
+            <div class="text-box"><h3>那一天，我换上红装</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+        <div class="page">
+            <img src="0N2A5916.jpg" alt="新娘">
+            <div class="text-box"><h3>凤冠霞帔，只为最美的遇见</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+        <div class="page">
+            <img src="0N2A5931.jpg" alt="合照">
+            <div class="text-box"><h3>执手相看，许下三生三世的诺言</h3></div>
+            <div class="swipe-up-icon"></div>
         </div>
 
+        <!-- 第二组：秘密花园 -->
+        <div class="page">
+            <img src="0N2A5985.jpg" alt="新郎">
+            <div class="text-box"><h3>晨光微白，微风不燥</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+        <div class="page">
+            <img src="0N2A6009.jpg" alt="新娘">
+            <div class="text-box"><h3>你像花间的精灵，温柔了岁月</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+        <div class="page">
+            <img src="0N2A5974.jpg" alt="合照">
+            <div class="text-box"><h3>眼波流转，你是这花园里唯一的风景</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+
+        <!-- 第三组：室内庄重 -->
+        <div class="page">
+            <img src="0N2A6107.jpg" alt="新郎">
+            <div class="text-box"><h3>盛装以待，心跳如鼓</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+        <div class="page">
+            <img src="0N2A6150.jpg" alt="新娘">
+            <div class="text-box"><h3>一袭白纱，是我向你奔赴的模样</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+        <div class="page">
+            <img src="0N2A6165.jpg" alt="合照">
+            <div class="text-box"><h3>水晶灯下，闪耀的是笃定一生的光芒</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+
+        <!-- 第四组：落日户外 -->
+        <div class="page">
+            <img src="0N2A6276.jpg" alt="合照">
+            <div class="text-box"><h3>漫天花雨中，拥你入怀</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+        <div class="page">
+            <img src="0N2A6419.jpg" alt="新娘">
+            <div class="text-box"><h3>落日余晖里，为你披上温柔</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+        <div class="page">
+            <img src="0N2A6403.jpg" alt="合照">
+            <div class="text-box"><h3>暮暮朝朝，时光不老，我们不散</h3></div>
+            <div class="swipe-up-icon"></div>
+        </div>
+
+        <!-- 最终页：邀请函 -->
+        <div class="page ending-page">
+            <img src="0N2A6205.jpg" alt="邀请">
+            <div class="ending-text">
+                <h1>我们结婚啦</h1>
+                <p>诚邀您见证我们的重要时刻<br>期待您的到来，分享我们的喜悦</p>
+                <br>
+                <p style="font-size: 0.85rem; color: #999;">— 葛思远 & 方紫瑜 —</p>
+            </div>
+        </div>
     </div>
 
     <script>
         const bgm = document.getElementById('bgm');
-        const musicBtn = document.getElementById('musicBtn');
-
-        window.addEventListener('DOMContentLoaded', () => {
-            bgm.play().then(() => {
-                musicBtn.classList.add('playing');
-            }).catch(e => {
-                console.log("等待点击按钮播放音乐");
-            });
-        });
-
-        function startFilm() {
-            document.getElementById('introScreen').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-            toggleMusic(true);
-        }
-
-        function toggleMusic(forcePlay = false) {
-            if (bgm.paused || forcePlay) {
-                bgm.play().then(() => {
-                    musicBtn.classList.add('playing');
-                }).catch(e => console.log("Audio play error"));
-            } else {
-                bgm.pause();
-                musicBtn.classList.remove('playing');
+        const btn = document.getElementById('musicBtn');
+        let isPlaying = false;
+        
+        document.body.addEventListener('touchstart', function() {
+            if(!isPlaying) { 
+                bgm.play(); 
+                isPlaying = true; 
+                btn.style.animationPlayState = 'running';
             }
-        }
+        }, {once:true});
 
-        // 高德地图直接调起与定位
-        function openMap() {
-            const destination = "肥东希尔顿欢朋酒店-亚特兰蒂斯厅";
-            // 使用通用高德地图标注 URI
-            const mapUrl = "https://uri.amap.com/marker?position=117.47285,31.88458&name=" + encodeURIComponent(destination) + "&src=wedding&coordinate=gaode&callnative=1";
-            window.location.href = mapUrl;
-        }
-
-        function addToCalendar() {
-            alert("已为您生成日历事件提示：\n【葛思远 & 方紫瑜 婚礼】\n时间：2026年9月19日 11:38\n地点：肥东希尔顿欢朋酒店-亚特兰蒂斯厅");
-        }
-
-        function submitRSVP(e) {
-            e.preventDefault();
-            const wish = document.getElementById('wishInput').value;
-            if (wish) {
-                const bulletBox = document.getElementById('bulletBox');
-                const newBullet = document.createElement('div');
-                newBullet.className = 'bullet-item';
-                newBullet.style.top = Math.random() * 40 + 10 + 'px';
-                newBullet.style.animationDelay = '0s';
-                newBullet.innerText = wish;
-                bulletBox.appendChild(newBullet);
+        btn.onclick = () => {
+            if(bgm.paused) { 
+                bgm.play(); 
+                btn.style.animationPlayState = 'running'; 
+                isPlaying = true;
+            } else { 
+                bgm.pause(); 
+                btn.style.animationPlayState = 'paused'; 
+                isPlaying = false;
             }
-            alert("感谢您的确认与祝福！已为您生成首映礼专属座位卡！");
         }
     </script>
 </body>
