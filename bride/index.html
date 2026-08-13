@@ -313,53 +313,43 @@
     </div>
 
     <script>
-                const bgm = document.getElementById('bgm');
+                        // ===== 旧版核心：按钮点击与交互强触发音频逻辑 =====
+        const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
 
-        bgm.addEventListener('play', () => musicBtn.classList.add('playing'));
-        bgm.addEventListener('pause', () => musicBtn.classList.remove('playing'));
-
-        function forcePlay() {
-            if (bgm.paused) {
-                const p = bgm.play();
-                if (p !== undefined) {
-                    p.then(() => {
-                        console.log("音频播放成功");
-                    }).catch(e => {
-                        console.log("等待用户第一次触摸交互播放", e);
-                    });
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', forcePlay);
-
-        document.addEventListener("WeixinJSBridgeReady", () => {
-            if (typeof WeixinJSBridge == "object") {
-                WeixinJSBridge.invoke("getNetworkType", {}, () => {
-                    forcePlay();
-                });
-            }
-        }, false);
-
-        const userActionEvents = ['touchstart', 'touchend', 'click', 'scroll'];
-        function playOnFirstUserAction() {
-            forcePlay();
-            userActionEvents.forEach(event => {
-                document.removeEventListener(event, playOnFirstUserAction, true);
-            });
-        }
-        userActionEvents.forEach(event => {
-            document.addEventListener(event, playOnFirstUserAction, true);
-        });
-
-        function toggleMusic() {
-            if (bgm.paused) {
-                bgm.play().catch(e => console.log("播放被拦截:", e));
+        function toggleMusic(forcePlay = false) {
+            if (bgm.paused || forcePlay) {
+                bgm.play().then(() => {
+                    musicBtn.classList.add('playing');
+                }).catch(e => console.log("等待用户点击按钮播放", e));
             } else {
                 bgm.pause();
+                musicBtn.classList.remove('playing');
             }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            bgm.play().then(() => {
+                musicBtn.classList.add('playing');
+            }).catch(e => console.log("等待点击页面唤醒音频"));
         });
+
+        document.addEventListener("WeixinJSBridgeReady", () => {
+            bgm.play().then(() => {
+                musicBtn.classList.add('playing');
+            }).catch(e => console.log("微信环境静默触发"));
+        }, false);
+
+        const userEvents = ['touchstart', 'touchend', 'click', 'scroll'];
+        function forcePlayOnUserAction() {
+            if (bgm.paused) {
+                bgm.play().then(() => {
+                    musicBtn.classList.add('playing');
+                }).catch(e => console.log(e));
+            }
+            userEvents.forEach(evt => document.removeEventListener(evt, forcePlayOnUserAction, true));
+        }
+        userEvents.forEach(evt => document.addEventListener(evt, forcePlayOnUserAction, true)););
             } else {
                 bgm.pause();
                 isPlaying = false;

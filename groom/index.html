@@ -313,58 +313,47 @@
     </div>
 
     <script>
-                const bgm = document.getElementById('bgm');
+                        // ===== 旧版核心：按钮点击与交互强触发音频逻辑 =====
+        const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
 
-        // 只要声音真的开始放了，图标就旋转；暂停了就停止旋转
-        bgm.addEventListener('play', () => musicBtn.classList.add('playing'));
-        bgm.addEventListener('pause', () => musicBtn.classList.remove('playing'));
-
-        function forcePlay() {
-            if (bgm.paused) {
-                const p = bgm.play();
-                if (p !== undefined) {
-                    p.then(() => {
-                        console.log("音频播放成功");
-                    }).catch(e => {
-                        console.log("等待用户第一次触摸交互播放", e);
-                    });
-                }
-            }
-        }
-
-        // 尝试页面直接播放
-        document.addEventListener('DOMContentLoaded', forcePlay);
-
-        # 微信环境下强行触发
-        document.addEventListener("WeixinJSBridgeReady", () => {
-            if (typeof WeixinJSBridge == "object") {
-                WeixinJSBridge.invoke("getNetworkType", {}, () => {
-                    forcePlay();
-                });
-            }
-        }, false);
-
-        # 捕获用户在手机上的任何第一个动作（触摸、滑动、点击）无感播放
-        const userActionEvents = ['touchstart', 'touchend', 'click', 'scroll'];
-        function playOnFirstUserAction() {
-            forcePlay();
-            userActionEvents.forEach(event => {
-                document.removeEventListener(event, playOnFirstUserAction, true);
-            });
-        }
-        userActionEvents.forEach(event => {
-            document.addEventListener(event, playOnFirstUserAction, true);
-        });
-
-        // 右上角图标手动开关
-        function toggleMusic() {
-            if (bgm.paused) {
-                bgm.play().catch(e => console.log("播放被拦截:", e));
+        // 统一控制播放/旋转动画
+        function toggleMusic(forcePlay = false) {
+            if (bgm.paused || forcePlay) {
+                bgm.play().then(() => {
+                    musicBtn.classList.add('playing');
+                }).catch(e => console.log("等待用户点击按钮播放", e));
             } else {
                 bgm.pause();
+                musicBtn.classList.remove('playing');
             }
+        }
+
+        // 页面初次尝试播放
+        document.addEventListener('DOMContentLoaded', () => {
+            bgm.play().then(() => {
+                musicBtn.classList.add('playing');
+            }).catch(e => console.log("等待点击页面唤醒音频"));
         });
+
+        // 微信环境 API 静默唤醒
+        document.addEventListener("WeixinJSBridgeReady", () => {
+            bgm.play().then(() => {
+                musicBtn.classList.add('playing');
+            }).catch(e => console.log("微信环境静默触发"));
+        }, false);
+
+        // 捕获用户在屏幕上的任意第一次触摸/滑动（旧版交互唤醒）
+        const userEvents = ['touchstart', 'touchend', 'click', 'scroll'];
+        function forcePlayOnUserAction() {
+            if (bgm.paused) {
+                bgm.play().then(() => {
+                    musicBtn.classList.add('playing');
+                }).catch(e => console.log(e));
+            }
+            userEvents.forEach(evt => document.removeEventListener(evt, forcePlayOnUserAction, true));
+        }
+        userEvents.forEach(evt => document.addEventListener(evt, forcePlayOnUserAction, true)););
             } else {
                 bgm.pause();
                 isPlaying = false;
