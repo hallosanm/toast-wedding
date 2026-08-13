@@ -127,10 +127,9 @@
         .ticket-label { color: var(--text-muted); margin-right: 8px; font-size: 14px; }
         .ticket-value-highlight { font-weight: 700; color: var(--text-dark); }
 
-        .action-btns { display: flex; gap: 12px; margin-top: 20px; }
-        .btn-action { flex: 1; padding: 12px 0; text-align: center; border-radius: 8px; font-size: 14px; text-decoration: none; cursor: pointer; }
+        .action-btns { display: flex; margin-top: 20px; }
+        .btn-action { width: 100%; padding: 13px 0; text-align: center; border-radius: 8px; font-size: 15px; text-decoration: none; cursor: pointer; }
         .btn-primary { background: var(--accent-gold); color: #fff; font-weight: 600; box-shadow: 0 4px 12px rgba(198, 156, 89, 0.3); }
-        .btn-secondary { background: #fff; border: 1px solid var(--border-color); color: var(--text-dark); font-weight: 600; }
 
         .form-group { margin-bottom: 14px; text-align: left; }
         .form-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
@@ -267,7 +266,6 @@
 
                 <div class="action-btns">
                     <a class="btn-action btn-primary" onclick="openMap()">📍 一键地图导航</a>
-                    <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
             </div>
 
@@ -362,36 +360,6 @@
             const keyword = encodeURIComponent("肥东希尔顿欢朋酒店");
             const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=31.879500&lon=117.471600`;
             window.location.href = mapUrl;
-        }
-
-        // 真正的生成并唤起手机系统日历文件功能 (.ics)
-        function addToCalendar() {
-            const title = "葛思远 & 方紫瑜 婚礼宴请";
-            const location = "肥东希尔顿欢朋酒店-亚特兰蒂斯厅";
-            const details = "诚邀您参加葛思远与方紫瑜的婚礼！";
-            const startDate = "20260919T033800Z"; // UTC 时间对应北京时间 2026-09-19 11:38
-            const endDate = "20260919T063800Z";
-
-            const icsData = 
-                "BEGIN:VCALENDAR\n" +
-                "VERSION:2.0\n" +
-                "PRODID:-//Wedding Invitation//CN\n" +
-                "BEGIN:VEVENT\n" +
-                "SUMMARY:" + title + "\n" +
-                "LOCATION:" + location + "\n" +
-                "DESCRIPTION:" + details + "\n" +
-                "DTSTART:" + startDate + "\n" +
-                "DTEND:" + endDate + "\n" +
-                "END:VEVENT\n" +
-                "END:VCALENDAR";
-
-            const blob = new Blob([icsData], { type: "text/calendar;charset=utf-8" });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.setAttribute('download', 'wedding-groom.ics');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         function submitRSVP(e) {
