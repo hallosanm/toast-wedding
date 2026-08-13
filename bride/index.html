@@ -358,12 +358,10 @@
             });
         });
 
-        // 单点标记标注模式（非列表模式），直接在地图中心显示唯一点卡片
+        // 采用高德通用 H5 搜索协议，自动聚焦搜索出的第一条唯一最佳匹配项
         function openMap() {
-            const lng = 118.56;
-            const lat = 30.30;
-            const name = encodeURIComponent("旌德海螺国际大酒店");
-            window.location.href = `https://uri.amap.com/marker?position=${lng},${lat}&name=${name}&src=wedding&coordinate=gaode&callnative=1`;
+            const keyword = encodeURIComponent("旌德海螺国际大酒店");
+            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&src=wedding&callnative=1`;
         }
 
         function addToCalendar() {
