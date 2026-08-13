@@ -182,7 +182,7 @@
 
     <div class="bg-cover-art"></div>
 
-    <!-- 首页开启封套遮罩（触发音乐播放的核心交互点） -->
+    <!-- 首页开启封套遮罩 -->
     <div class="cover-overlay" id="coverOverlay" onclick="enterInvitation()">
         <div class="cover-card">
             <div class="cover-seal">💌</div>
@@ -360,9 +360,10 @@
         const musicBtn = document.getElementById('musicBtn');
         const coverOverlay = document.getElementById('coverOverlay');
 
-        // 点击开启邀请函：手势唤醒播放音频并隐藏封套
+        // 点击开启邀请函：跳至第10秒，唤醒播放音频并隐藏封套
         function enterInvitation() {
             if (bgm) {
+                bgm.currentTime = 10; // 从第 10 秒开始播放
                 bgm.play().then(() => {
                     musicBtn.classList.add('playing');
                 }).catch(err => console.log("播放失败", err));
