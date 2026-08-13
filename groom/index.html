@@ -8,8 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=ZCOOL+KuaiLe&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #F3ECE0; /* 纯色暖燕麦底色 */
-            --card-bg: #FFFFFF;  /* 纯白照片卡片 */
+            --bg-color: #F3ECE0;
+            --card-bg: #FFFFFF;
             --accent-gold: #c69c59;
             --accent-rose: #d88a8a;
             --text-dark: #3a322c;
@@ -21,23 +21,28 @@
 
         body, html { height: 100%; overflow: hidden; background-color: var(--bg-color); color: var(--text-dark); font-family: 'Noto Serif SC', 'Georgia', serif; }
 
-        /* 纯色背景层 */
         .bg-cover-art {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-color);
-            z-index: 0; pointer-events: none;
+            background-color: var(--bg-color); z-index: 0; pointer-events: none;
         }
 
         .music-btn {
-            position: fixed; top: 20px; right: 20px; width: 38px; height: 38px;
+            position: fixed; top: 20px; right: 20px; width: 40px; height: 40px;
             border-radius: 50%; background: rgba(255, 255, 255, 0.95);
             border: 1px solid var(--accent-gold); color: var(--accent-gold);
             display: flex; justify-content: center; align-items: center;
-            z-index: 100; cursor: pointer; font-size: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); backdrop-filter: blur(6px);
+            z-index: 100; cursor: pointer; font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); backdrop-filter: blur(6px);
+            animation: pulse 1.5s infinite;
         }
         .music-btn.playing { animation: spin 4s linear infinite; }
+
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 156, 89, 0.4); }
+            70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(198, 156, 89, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 156, 89, 0); }
+        }
 
         .app-container {
             width: 100%; max-width: 430px; height: 100vh; margin: 0 auto;
@@ -52,7 +57,6 @@
             align-items: center; padding: 30px 20px; position: relative;
         }
 
-        /* 封面 */
         .vinyl-record-card {
             width: 240px; height: 240px; border-radius: 50%; border: 6px solid #ffffff;
             overflow: hidden; margin-bottom: 25px;
@@ -72,7 +76,6 @@
         .couple-names { font-size: 16px; letter-spacing: 3px; color: var(--accent-gold); margin-bottom: 6px; font-weight: 600; }
         .invitation-quote { font-size: 15px; letter-spacing: 2px; color: var(--text-dark); margin-bottom: 25px; font-weight: 600; }
 
-        /* 纯白卡片凸显层次感 */
         .quad-card {
             width: 100%; background: var(--card-bg); border: 1px solid var(--border-color);
             border-radius: 16px; padding: 18px; box-shadow: 0 12px 32px rgba(120, 100, 80, 0.15);
@@ -83,7 +86,6 @@
         .act-title { font-size: 20px; letter-spacing: 2px; margin: 4px 0 10px; color: var(--text-dark); }
         .act-poem { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; padding: 0 10px; min-height: 42px; display: flex; align-items: center; }
 
-        /* 横向滑动相册 */
         .carousel-box {
             width: 100%; height: 50vh; max-height: 420px; display: flex;
             overflow-x: auto; scroll-snap-type: x mandatory; border-radius: 10px;
@@ -98,47 +100,49 @@
         .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-color); transition: 0.3s; }
         .dot.active { background: var(--accent-gold); width: 18px; border-radius: 4px; }
 
-        /* 向上微调位置、调大字号并加粗的提示词 */
         .swipe-hint { 
-            position: absolute; 
-            bottom: 25px; 
-            font-size: 13px; 
-            font-weight: 600;
-            color: var(--accent-gold); 
-            letter-spacing: 1.5px; 
+            position: absolute; bottom: 25px; font-size: 13px; font-weight: 600;
+            color: var(--accent-gold); letter-spacing: 1.5px; 
             text-shadow: 0 1px 2px rgba(255,255,255,0.8);
             animation: bounce 2s infinite; 
         }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
 
-        /* 结尾信息页 */
         .ending-scroll-page { height: auto; min-height: 100vh; padding: 40px 20px; background: var(--bg-color); }
+        
+        /* 统一门票卡片样式与字号加大 */
         .ticket-box {
-            background: linear-gradient(135deg, #ffffff 0%, #fbf6ee 100%);
-            border: 1px dashed var(--accent-gold); border-radius: 12px; padding: 20px;
-            box-shadow: 0 8px 25px rgba(198, 156, 89, 0.1); margin-bottom: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px 20px;
+            box-shadow: 0 12px 32px rgba(120, 100, 80, 0.15);
+            margin-bottom: 25px;
+            width: 100%;
         }
-        .ticket-head { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .ticket-title { font-family: 'Cinzel Decorative', serif; font-size: 13px; color: var(--accent-gold); font-weight: 700; }
-        .ticket-date-badge { font-size: 11px; color: #fff; background: var(--accent-gold); padding: 2px 6px; border-radius: 4px; }
-        .ticket-row { margin-bottom: 8px; font-size: 12.5px; line-height: 1.5; color: var(--text-dark); text-align: left; }
-        .ticket-label { color: var(--text-muted); margin-right: 6px; }
+        .ticket-head { border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .ticket-title { font-family: 'Cinzel Decorative', serif; font-size: 14px; color: var(--accent-gold); font-weight: 700; letter-spacing: 1px; }
+        .ticket-date-badge { font-size: 12px; color: #fff; background: var(--accent-gold); padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+        
+        .ticket-row { margin-bottom: 12px; font-size: 15px; line-height: 1.6; color: var(--text-dark); text-align: left; }
+        .ticket-label { color: var(--text-muted); margin-right: 8px; font-size: 14px; }
+        .ticket-value-highlight { font-weight: 700; color: var(--text-dark); }
 
-        .action-btns { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-action { flex: 1; padding: 10px 0; text-align: center; border-radius: 6px; font-size: 12px; text-decoration: none; cursor: pointer; }
-        .btn-primary { background: var(--accent-gold); color: #fff; font-weight: 600; }
-        .btn-secondary { background: #fff; border: 1px solid var(--border-color); color: var(--text-dark); }
+        .action-btns { display: flex; gap: 12px; margin-top: 20px; }
+        .btn-action { flex: 1; padding: 12px 0; text-align: center; border-radius: 8px; font-size: 14px; text-decoration: none; cursor: pointer; }
+        .btn-primary { background: var(--accent-gold); color: #fff; font-weight: 600; box-shadow: 0 4px 12px rgba(198, 156, 89, 0.3); }
+        .btn-secondary { background: #fff; border: 1px solid var(--border-color); color: var(--text-dark); font-weight: 600; }
 
-        .form-group { margin-bottom: 12px; text-align: left; }
-        .form-label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
-        .form-input, .form-select { width: 100%; padding: 10px; background: #fff; border: 1px solid var(--border-color); border-radius: 6px; font-size: 12.5px; outline: none; }
-        .btn-submit { width: 100%; padding: 11px; background: var(--accent-gold); border: none; border-radius: 6px; color: #fff; font-weight: 600; font-size: 13px; cursor: pointer; margin-top: 6px; }
+        .form-group { margin-bottom: 14px; text-align: left; }
+        .form-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+        .form-input, .form-select { width: 100%; padding: 12px; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; outline: none; }
+        .btn-submit { width: 100%; padding: 13px; background: var(--accent-gold); border: none; border-radius: 8px; color: #fff; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 12px rgba(198, 156, 89, 0.3); }
 
-        .bullet-container { height: 60px; background: rgba(255,255,255,0.85); border-radius: 6px; overflow: hidden; position: relative; margin-top: 15px; border: 1px solid var(--border-color); }
-        .bullet-item { position: absolute; white-space: nowrap; color: var(--accent-gold); font-size: 12px; animation: bullet 8s linear infinite; }
+        .bullet-container { height: 60px; background: rgba(255,255,255,0.85); border-radius: 8px; overflow: hidden; position: relative; margin-top: 18px; border: 1px solid var(--border-color); }
+        .bullet-item { position: absolute; white-space: nowrap; color: var(--accent-gold); font-size: 13px; animation: bullet 8s linear infinite; }
         @keyframes bullet { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .footer-credits { text-align: center; margin-top: 30px; font-size: 11px; color: var(--text-muted); line-height: 1.8; }
+        .footer-credits { text-align: center; margin-top: 35px; font-size: 12px; color: var(--text-muted); line-height: 1.8; }
     </style>
 </head>
 <body>
@@ -151,7 +155,7 @@
 
     <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
 
-    <div class="app-container">
+    <div class="app-container" id="appContainer">
         
         <!-- INTRO COVER -->
         <section class="screen-intro">
@@ -241,7 +245,7 @@
             <div class="swipe-hint">下滑查看婚礼信息 ↓</div>
         </section>
 
-        <!-- 结尾页：婚礼信息 + 门票 + RSVP -->
+        <!-- 结尾页：男方婚礼信息 + 门票 + RSVP -->
         <section class="section-page ending-scroll-page">
             <div class="quad-card" style="margin-bottom: 20px;">
                 <div class="act-tag">SPECIAL INVITATION</div>
@@ -256,10 +260,10 @@
                     <div class="ticket-title">ADMIT ONE ✦ 婚礼门票</div>
                     <div class="ticket-date-badge">2026.09.19</div>
                 </div>
-                <div class="ticket-row"><span class="ticket-label">新郎 GROOM:</span> 葛思远</div>
-                <div class="ticket-row"><span class="ticket-label">新娘 BRIDE:</span> 方紫瑜</div>
-                <div class="ticket-row"><span class="ticket-label">吉时 TIME:</span> 2026年9月19日 11:38</div>
-                <div class="ticket-row"><span class="ticket-label">地点 VENUE:</span> 肥东希尔顿欢朋酒店-亚特兰蒂斯厅</div>
+                <div class="ticket-row"><span class="ticket-label">新郎 GROOM:</span> <span class="ticket-value-highlight">葛思远</span></div>
+                <div class="ticket-row"><span class="ticket-label">新娘 BRIDE:</span> <span class="ticket-value-highlight">方紫瑜</span></div>
+                <div class="ticket-row"><span class="ticket-label">吉时 TIME:</span> <span class="ticket-value-highlight">2026年9月19日 11:38</span></div>
+                <div class="ticket-row"><span class="ticket-label">地点 VENUE:</span> <span class="ticket-value-highlight">肥东希尔顿欢朋酒店-亚特兰蒂斯厅</span></div>
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> 安徽省肥东县长江东路与金阳路交叉口（地铁2号线桂王站A口出）</div>
 
                 <div class="action-btns">
@@ -312,19 +316,34 @@
     <script>
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
 
-        document.body.addEventListener('touchstart', function() {
-            if (bgm.paused) {
-                bgm.play().then(() => musicBtn.classList.add('playing')).catch(e => console.log(e));
+        function playMusic() {
+            if (!isPlaying) {
+                bgm.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.classList.add('playing');
+                }).catch(e => console.log("自动播放被阻断"));
             }
-        }, {once: true});
+        }
+
+        document.addEventListener('DOMContentLoaded', playMusic);
+        document.addEventListener("WeixinJSBridgeReady", playMusic, false);
+
+        const triggerEvents = ['touchstart', 'touchend', 'click', 'scroll'];
+        triggerEvents.forEach(event => {
+            document.addEventListener(event, playMusic, { once: true });
+        });
 
         function toggleMusic() {
             if (bgm.paused) {
-                bgm.play();
-                musicBtn.classList.add('playing');
+                bgm.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.classList.add('playing');
+                });
             } else {
                 bgm.pause();
+                isPlaying = false;
                 musicBtn.classList.remove('playing');
             }
         }
