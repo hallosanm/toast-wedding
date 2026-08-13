@@ -117,8 +117,21 @@
         }
 
         .act-tag { font-family: 'Cinzel Decorative', serif; font-size: 11px; letter-spacing: 2px; color: var(--accent-gold); }
-        .act-title { font-size: 20px; letter-spacing: 2px; margin: 4px 0 10px; color: var(--text-dark); }
-        .act-poem { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; padding: 0 10px; min-height: 42px; display: flex; align-items: center; }
+        .act-title { font-size: 20px; letter-spacing: 2px; margin: 4px 0 8px; color: var(--text-dark); }
+        
+        /* 优化后的章节小字：字号调大至16px，按分句自动换行居中排版 */
+        .act-poem { 
+            font-size: 16px; 
+            font-weight: 600;
+            color: var(--text-muted); 
+            line-height: 1.6; 
+            margin-bottom: 14px; 
+            padding: 0 5px; 
+            width: 100%;
+            text-align: center;
+            white-space: pre-line;
+            letter-spacing: 0.5px;
+        }
 
         .carousel-box {
             width: 100%; height: 50vh; max-height: 420px; display: flex;
@@ -216,7 +229,8 @@
             <div class="quad-card">
                 <div class="act-tag">ACT I · ORIENTAL CLASSIC</div>
                 <div class="act-title">第一乐章 · 东方红妆</div>
-                <div class="act-poem">“凤冠霞帔，喜结连理；执手相看，许下三生三世的契约与诺言。”</div>
+                <div class="act-poem">“凤冠霞帔，喜结连理；
+执手相看，许下三生三世的契约与诺言。”</div>
                 
                 <div class="carousel-box">
                     <div class="carousel-item"><img src="0N2A5901.jpg"></div>
@@ -235,7 +249,8 @@
             <div class="quad-card">
                 <div class="act-tag">ACT II · SECRET GARDEN</div>
                 <div class="act-title">第二乐章 · 秘密花园</div>
-                <div class="act-poem">“晨光微白，微风不燥；你像花间的精灵，温柔了所有漫长的岁月。”</div>
+                <div class="act-poem">“晨光微白，微风不燥；
+你像花间的精灵，温柔了所有漫长的岁月。”</div>
                 
                 <div class="carousel-box">
                     <div class="carousel-item"><img src="0N2A6009.jpg"></div>
@@ -254,7 +269,8 @@
             <div class="quad-card">
                 <div class="act-tag">ACT III · MODERN ELEGANCE</div>
                 <div class="act-title">第三乐章 · 盛装优雅</div>
-                <div class="act-poem">“盛装以待，心跳如鼓；一袭白纱，是我笃定奔赴你一生的模样。”</div>
+                <div class="act-poem">“盛装以待，心跳如鼓；
+一袭白纱，是我笃定奔赴你一生的模样。”</div>
                 
                 <div class="carousel-box">
                     <div class="carousel-item"><img src="0N2A6150.jpg"></div>
@@ -273,7 +289,8 @@
             <div class="quad-card">
                 <div class="act-tag">ACT IV · SUNSET ROMANCE</div>
                 <div class="act-title">第四乐章 · 落日余晖</div>
-                <div class="act-poem">“漫天花雨中拥你入怀，落日余晖里披上温柔；时光不老，我们不散。”</div>
+                <div class="act-poem">“漫天花雨中拥你入怀，
+落日余晖里时光不老，我们不散。”</div>
                 
                 <div class="carousel-box">
                     <div class="carousel-item"><img src="0N2A6276.jpg"></div>
@@ -360,10 +377,9 @@
         const musicBtn = document.getElementById('musicBtn');
         const coverOverlay = document.getElementById('coverOverlay');
 
-        // 点击开启邀请函：跳至第10秒，唤醒播放音频并隐藏封套
         function enterInvitation() {
             if (bgm) {
-                bgm.currentTime = 10; // 从第 10 秒开始播放
+                bgm.currentTime = 10;
                 bgm.play().then(() => {
                     musicBtn.classList.add('playing');
                 }).catch(err => console.log("播放失败", err));
@@ -373,7 +389,6 @@
             }
         }
 
-        // 手动切换播放与暂停
         function toggleMusic() {
             if (!bgm) return;
             if (bgm.paused) {
@@ -389,7 +404,6 @@
         bgm.addEventListener('playing', () => musicBtn.classList.add('playing'));
         bgm.addEventListener('pause', () => musicBtn.classList.remove('playing'));
 
-        // 轮播图指示器
         document.querySelectorAll('.carousel-box').forEach((box) => {
             box.addEventListener('scroll', () => {
                 const index = Math.round(box.scrollLeft / box.clientWidth);
