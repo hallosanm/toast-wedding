@@ -356,10 +356,11 @@
             });
         });
 
-        // 使用高德官方通用 POI 搜索 URI：直达“旌德海螺国际大酒店”搜索详情页（无地标气泡图钉）
+        // 结合关键词、精准经纬度中心点 (center) 与高清缩放级别 (zoom)，直接把地图视角放大并聚焦在酒店位置
         function openMap() {
             const keyword = encodeURIComponent("旌德海螺国际大酒店");
-            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&src=wedding&callnative=1`;
+            const mapUrl = `https://uri.amap.com/search?keyword=${keyword}&center=118.536900,30.289100&view=map&zoom=16&src=wedding&callnative=1`;
+            window.location.href = mapUrl;
         }
 
         function addToCalendar() {

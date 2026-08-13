@@ -356,10 +356,11 @@
             });
         });
 
-        // 使用高德官方通用 POI 搜索 URI，绝无乱码，并直达标准酒店搜索详情视图（无手动标注地标图钉）
+        // 结合关键词、精准经纬度中心点 (center) 与高清缩放级别 (zoom)，直接把地图视角放大并聚焦在酒店位置
         function openMap() {
             const keyword = encodeURIComponent("合肥肥东希尔顿欢朋酒店");
-            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&src=wedding&callnative=1`;
+            const mapUrl = `https://uri.amap.com/search?keyword=${keyword}&center=117.471600,31.879500&view=map&zoom=16&src=wedding&callnative=1`;
+            window.location.href = mapUrl;
         }
 
         function addToCalendar() {
