@@ -313,33 +313,53 @@
     </div>
 
     <script>
-        const bgm = document.getElementById('bgm');
+                const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
-        let isPlaying = false;
 
-        function playMusic() {
-            if (!isPlaying) {
-                bgm.play().then(() => {
-                    isPlaying = true;
-                    musicBtn.classList.add('playing');
-                }).catch(e => console.log("自动播放被阻断"));
+        bgm.addEventListener('play', () => musicBtn.classList.add('playing'));
+        bgm.addEventListener('pause', () => musicBtn.classList.remove('playing'));
+
+        function forcePlay() {
+            if (bgm.paused) {
+                const p = bgm.play();
+                if (p !== undefined) {
+                    p.then(() => {
+                        console.log("音频播放成功");
+                    }).catch(e => {
+                        console.log("等待用户第一次触摸交互播放", e);
+                    });
+                }
             }
         }
 
-        document.addEventListener('DOMContentLoaded', playMusic);
-        document.addEventListener("WeixinJSBridgeReady", playMusic, false);
+        document.addEventListener('DOMContentLoaded', forcePlay);
 
-        const triggerEvents = ['touchstart', 'touchend', 'click', 'scroll'];
-        triggerEvents.forEach(event => {
-            document.addEventListener(event, playMusic, { once: true });
+        document.addEventListener("WeixinJSBridgeReady", () => {
+            if (typeof WeixinJSBridge == "object") {
+                WeixinJSBridge.invoke("getNetworkType", {}, () => {
+                    forcePlay();
+                });
+            }
+        }, false);
+
+        const userActionEvents = ['touchstart', 'touchend', 'click', 'scroll'];
+        function playOnFirstUserAction() {
+            forcePlay();
+            userActionEvents.forEach(event => {
+                document.removeEventListener(event, playOnFirstUserAction, true);
+            });
+        }
+        userActionEvents.forEach(event => {
+            document.addEventListener(event, playOnFirstUserAction, true);
         });
 
         function toggleMusic() {
             if (bgm.paused) {
-                bgm.play().then(() => {
-                    isPlaying = true;
-                    musicBtn.classList.add('playing');
-                });
+                bgm.play().catch(e => console.log("播放被拦截:", e));
+            } else {
+                bgm.pause();
+            }
+        });
             } else {
                 bgm.pause();
                 isPlaying = false;
