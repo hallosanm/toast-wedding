@@ -358,10 +358,10 @@
             });
         });
 
-        // 搜索并聚焦第一条匹配结果：旌德海螺国际大酒店
+        // 优化方案：改用高德官方 ditu.amap.com 标准 H5 搜索链接，无缝直达，不经过 nav1 拦截页
         function openMap() {
             const keyword = encodeURIComponent("旌德海螺国际大酒店");
-            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&src=wedding&callnative=1`;
+            window.location.href = `https://ditu.amap.com/search?query=${keyword}`;
         }
 
         function addToCalendar() {
