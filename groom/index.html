@@ -359,9 +359,12 @@
         });
 
         // 使用高德官方 H5 POI 强锁定协议，绝对保证直达酒店卡片
-        function openMap() {
-            const keyword = encodeURIComponent("肥东希尔顿欢朋酒店");
-            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=31.879500&lon=117.471600`;
+                function openMap() {
+            const lng = 117.477085;
+            const lat = 31.886470;
+            const name = encodeURIComponent("肥东希尔顿欢朋酒店");
+            window.location.href = `https://uri.amap.com/marker?position=${lng},${lat}&name=${name}&src=wedding&coordinate=gaode&callnative=1`;
+        }&lat=31.879500&lon=117.471600`;
             window.location.href = mapUrl;
         }
 

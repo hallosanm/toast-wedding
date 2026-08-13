@@ -359,9 +359,12 @@
         });
 
         // 使用高德官方 H5 POI 强锁定协议，绝对保证直达酒店卡片
-        function openMap() {
-            const keyword = encodeURIComponent("旌德海螺国际大酒店");
-            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=30.289100&lon=118.536900`;
+                function openMap() {
+            const lng = 118.548480;
+            const lat = 30.291750;
+            const name = encodeURIComponent("旌德海螺国际大酒店");
+            window.location.href = `https://uri.amap.com/marker?position=${lng},${lat}&name=${name}&src=wedding&coordinate=gaode&callnative=1`;
+        }&lat=30.289100&lon=118.536900`;
             window.location.href = mapUrl;
         }
 
