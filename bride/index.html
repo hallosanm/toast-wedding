@@ -147,11 +147,11 @@
 
     <div class="bg-cover-art"></div>
 
-    <audio id="bgm" loop preload="auto">
+    <audio id="bgm" loop preload="auto" playsinline webkit-playsinline>
         <source src="爱很简单.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
+    <div class="music-btn" id="musicBtn" onclick="toggleMusic(event)">🎵</div>
 
     <div class="app-container" id="appContainer">
         
@@ -315,24 +315,42 @@
         const musicBtn = document.getElementById('musicBtn');
         let isPlaying = false;
 
-        function playMusic() {
-            if (!isPlaying) {
+        function forcePlay() {
+            if (!isPlaying && bgm) {
                 bgm.play().then(() => {
                     isPlaying = true;
                     musicBtn.classList.add('playing');
-                }).catch(e => console.log("自动播放被阻断"));
+                    removeTouchListeners();
+                }).catch(err => {
+                    console.log("等待首次手势激活音频:", err);
+                });
             }
         }
 
-        document.addEventListener('DOMContentLoaded', playMusic);
-        document.addEventListener("WeixinJSBridgeReady", playMusic, false);
+        function removeTouchListeners() {
+            ['touchstart', 'touchend', 'click', 'pointerdown'].forEach(evt => {
+                document.removeEventListener(evt, forcePlay);
+            });
+        }
 
-        const triggerEvents = ['touchstart', 'touchend', 'click', 'scroll'];
-        triggerEvents.forEach(event => {
-            document.addEventListener(event, playMusic, { once: true });
+        // 1. 尝试自动播放及微信环境下原生唤起
+        document.addEventListener('DOMContentLoaded', forcePlay);
+        document.addEventListener("WeixinJSBridgeReady", function() {
+            if (typeof WeixinJSBridge !== 'undefined') {
+                WeixinJSBridge.invoke('getNetworkType', {}, function() {
+                    forcePlay();
+                });
+            }
+        }, false);
+
+        // 2. 全屏捕捉用户首次触摸/点击事件触发音频
+        ['touchstart', 'touchend', 'click', 'pointerdown'].forEach(evt => {
+            document.addEventListener(evt, forcePlay, { once: true });
         });
 
-        function toggleMusic() {
+        // 3. 顶部 🎵 按钮手动切换
+        function toggleMusic(e) {
+            if (e) e.stopPropagation();
             if (bgm.paused) {
                 bgm.play().then(() => {
                     isPlaying = true;
