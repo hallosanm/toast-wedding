@@ -148,9 +148,7 @@
 
     <div class="bg-cover-art"></div>
 
-    <audio id="bgm" loop preload="auto">
-        <source src="爱很简单.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgm" loop preload="auto" playsinline webkit-playsinline src="爱很简单.mp3"></audio>
 
     <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
 
@@ -266,7 +264,8 @@
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省肥东县长江东路与金阳路交叉口（地铁2号线桂王站A口出）</span></div>
 
                 <div class="action-btns">
-                    <a class="btn-action btn-primary" onclick="openMap()">📍 一键地图导航</a>
+                    <!-- 指定的高德 H5 搜索/标注 API 链接 (男方) -->
+                    <a class="btn-action btn-primary" href="https://m.amap.com/search/mapview/keywords=%E8%82%A5%E4%B8%9C%E5%B8%8C%E2%84%82%E9%A1%BF%E6%AC%A2%E6%9C%8B%E9%85%92%E5%BA%97&lat=31.879500&lon=117.471600" target="_blank">📍 一键地图导航</a>
                     <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
             </div>
@@ -315,37 +314,37 @@
     <script>
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
-        let isPlaying = false;
 
-        function playMusic() {
-            if (!isPlaying) {
+        function playBGM() {
+            if (bgm && bgm.paused) {
                 bgm.play().then(() => {
-                    isPlaying = true;
                     musicBtn.classList.add('playing');
-                }).catch(e => console.log("自动播放被阻断"));
+                }).catch(err => console.log("自动播放限制：等待用户交互"));
             }
         }
-
-        document.addEventListener('DOMContentLoaded', playMusic);
-        document.addEventListener("WeixinJSBridgeReady", playMusic, false);
-
-        const triggerEvents = ['touchstart', 'touchend', 'click', 'scroll'];
-        triggerEvents.forEach(event => {
-            document.addEventListener(event, playMusic, { once: true });
-        });
 
         function toggleMusic() {
             if (bgm.paused) {
                 bgm.play().then(() => {
-                    isPlaying = true;
                     musicBtn.classList.add('playing');
                 });
             } else {
                 bgm.pause();
-                isPlaying = false;
                 musicBtn.classList.remove('playing');
             }
         }
+
+        document.addEventListener("WeixinJSBridgeReady", function() {
+            playBGM();
+        }, false);
+
+        function firstTouchPlay() {
+            playBGM();
+            document.removeEventListener('touchstart', firstTouchPlay);
+            document.removeEventListener('click', firstTouchPlay);
+        }
+        document.addEventListener('touchstart', firstTouchPlay, false);
+        document.addEventListener('click', firstTouchPlay, false);
 
         document.querySelectorAll('.carousel-box').forEach((box) => {
             box.addEventListener('scroll', () => {
@@ -358,15 +357,8 @@
             });
         });
 
-        // 使用高德官方 H5 POI 强锁定协议，绝对保证直达酒店卡片
-        function openMap() {
-            const keyword = encodeURIComponent("肥东希尔顿欢朋酒店");
-            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=31.879500&lon=117.471600`;
-            window.location.href = mapUrl;
-        }
-
         function addToCalendar() {
-            alert("已为您生成日历事件提示：\n【葛思远 & 方紫瑜 婚礼】\n时间：2026年9月19日 11:38\n地点：肥东希尔顿欢朋酒店-亚特兰蒂斯厅");
+            alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月19日 11:38\n地点：肥东希尔顿欢朋酒店-亚特兰蒂斯厅");
         }
 
         function submitRSVP(e) {
