@@ -148,7 +148,7 @@
 
     <div class="bg-cover-art"></div>
 
-    <audio id="bgm" loop preload="auto" playsinline webkit-playsinline src="爱很简单.mp3"></audio>
+    <audio id="bgm" loop preload="auto" playsinline webkit-playsinline x5-playsinline src="爱很简单.mp3"></audio>
 
     <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
 
@@ -264,7 +264,6 @@
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省肥东县长江东路与金阳路交叉口（地铁2号线桂王站A口出）</span></div>
 
                 <div class="action-btns">
-                    <!-- 使用 GCJ02 精准坐标的免登录高德 Marker 标注模式 -->
                     <a class="btn-action btn-primary" href="https://uri.amap.com/marker?position=117.441241,31.876701&name=%E8%82%A5%E4%B8%9C%E5%B8%8C%E2%84%82%E9%A1%BF%E6%AC%A2%E6%9C%8B%E9%85%92%E5%BA%97&src=wedding" target="_blank">📍 一键地图导航</a>
                     <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
@@ -315,55 +314,85 @@
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
         const appContainer = document.getElementById('appContainer');
+        let isUserInteracted = false;
 
-        function toggleMusic(forcePlay = false) {
+        // 播放与暂停切换
+        function toggleMusic() {
             if (!bgm) return;
-            if (bgm.paused || forcePlay) {
-                if (bgm.readyState === 0) bgm.load();
-                bgm.play().then(() => {
-                    musicBtn.classList.add('playing');
-                }).catch(e => console.log("等待交互唤醒音乐", e));
+            if (bgm.paused) {
+                playAudio();
             } else {
                 bgm.pause();
-                musicBtn.classList.remove('playing');
             }
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            if (bgm) bgm.load();
-            toggleMusic(true);
-        });
-
-        function initWechatAudio() {
-            if (window.WeixinJSBridge) {
-                WeixinJSBridge.invoke('getNetworkType', {}, function () {
-                    toggleMusic(true);
-                }, false);
+        // 统一调用播放
+        function playAudio() {
+            if (bgm.readyState === 0) bgm.load();
+            const playPromise = bgm.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(e => console.log("等待交互解锁音频播放", e));
             }
         }
 
-        if (typeof WeixinJSBridge === "undefined") {
-            document.addEventListener("WeixinJSBridgeReady", initWechatAudio, false);
-        } else {
-            initWechatAudio();
-        }
+        // 音频状态事件驱动：严格控制按钮状态，避免假播放
+        bgm.addEventListener('playing', () => musicBtn.classList.add('playing'));
+        bgm.addEventListener('pause', () => musicBtn.classList.remove('playing'));
+        bgm.addEventListener('waiting', () => musicBtn.classList.remove('playing'));
 
-        const triggerEvents = ["touchstart", "touchend", "pointerdown", "click", "scroll"];
-        function playOnInteraction() {
+        // 触发式解锁
+        function unlockAudio() {
+            if (isUserInteracted) return;
             if (bgm && bgm.paused) {
-                toggleMusic(true);
+                bgm.play().then(() => {
+                    isUserInteracted = true;
+                    removeUnlockListeners();
+                }).catch(() => {});
             }
-            triggerEvents.forEach(evt => {
-                document.removeEventListener(evt, playOnInteraction, true);
-                if (appContainer) appContainer.removeEventListener(evt, playOnInteraction, true);
+        }
+
+        function removeUnlockListeners() {
+            const events = ["touchstart", "touchend", "pointerdown", "click", "scroll"];
+            events.forEach(evt => {
+                document.removeEventListener(evt, unlockAudio, true);
+                if (appContainer) appContainer.removeEventListener(evt, unlockAudio, true);
             });
         }
 
-        triggerEvents.forEach(evt => {
-            document.addEventListener(evt, playOnInteraction, true);
-            if (appContainer) appContainer.addEventListener(evt, playOnInteraction, true);
-        });
+        // 初始化播放逻辑与事件绑定
+        function initBGM() {
+            if (bgm) bgm.load();
 
+            // 1. 微信环境原生唤醒
+            if (typeof WeixinJSBridgeReady !== "undefined" || typeof window.WeixinJSBridge !== "undefined") {
+                const wxPlay = () => {
+                    window.WeixinJSBridge.invoke('getNetworkType', {}, () => playAudio(), false);
+                };
+                if (typeof window.WeixinJSBridge === "undefined") {
+                    document.addEventListener("WeixinJSBridgeReady", wxPlay, false);
+                } else {
+                    wxPlay();
+                }
+            }
+
+            // 2. 多手势触控与滑动监听唤醒
+            const events = ["touchstart", "touchend", "pointerdown", "click", "scroll"];
+            events.forEach(evt => {
+                document.addEventListener(evt, unlockAudio, { capture: true, passive: true });
+                if (appContainer) appContainer.addEventListener(evt, unlockAudio, { capture: true, passive: true });
+            });
+
+            // 3. 页面切回前台自动尝试重播
+            document.addEventListener("visibilitychange", () => {
+                if (!document.hidden && bgm && bgm.paused) {
+                    unlockAudio();
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", initBGM);
+
+        // 轮播图指示器
         document.querySelectorAll('.carousel-box').forEach((box) => {
             box.addEventListener('scroll', () => {
                 const index = Math.round(box.scrollLeft / box.clientWidth);
