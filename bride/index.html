@@ -26,6 +26,7 @@
             background-color: var(--bg-color); z-index: 0; pointer-events: none;
         }
 
+        /* 首页引导封套遮罩层 */
         .cover-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-color); z-index: 999;
@@ -177,15 +178,6 @@
         .btn-primary { background: var(--accent-gold); color: #fff; font-weight: 600; box-shadow: 0 4px 12px rgba(198, 156, 89, 0.3); }
         .btn-secondary { background: #fff; border: 1px solid var(--border-color); color: var(--text-dark); font-weight: 600; }
 
-        .form-group { margin-bottom: 14px; text-align: left; }
-        .form-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-        .form-input, .form-select { width: 100%; padding: 12px; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; outline: none; }
-        .btn-submit { width: 100%; padding: 13px; background: var(--accent-gold); border: none; border-radius: 8px; color: #fff; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 12px rgba(198, 156, 89, 0.3); }
-
-        .bullet-container { height: 60px; background: rgba(255,255,255,0.85); border-radius: 8px; overflow: hidden; position: relative; margin-top: 18px; border: 1px solid var(--border-color); }
-        .bullet-item { position: absolute; white-space: nowrap; color: var(--accent-gold); font-size: 13px; animation: bullet 8s linear infinite; }
-        @keyframes bullet { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
         .footer-credits { text-align: center; margin-top: 35px; font-size: 12px; color: var(--text-muted); line-height: 1.8; }
     </style>
 </head>
@@ -322,38 +314,6 @@
                 </div>
             </div>
 
-            <form id="rsvpForm" onsubmit="submitRSVP(event)" style="width: 100%;">
-                <div class="form-group">
-                    <label class="form-label">您的尊姓名</label>
-                    <input type="text" id="guestName" class="form-input" placeholder="请输入您的姓名" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">是否出席婚礼</label>
-                    <select id="guestAttend" class="form-select">
-                        <option value="yes">荣耀出席 ✦ 共同见证</option>
-                        <option value="no">遗憾缺席 ✦ 远方祝福</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">出席人数 (含儿童)</label>
-                    <select id="guestCount" class="form-select">
-                        <option value="1">1 人</option>
-                        <option value="2">2 人</option>
-                        <option value="3">3 人及以上</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">寄语 / 祝福</label>
-                    <input type="text" id="wishInput" class="form-input" placeholder="写下给思远与紫瑜的祝福吧...">
-                </div>
-                <button type="submit" class="btn-submit" id="btnSubmit">确认提交并生成专属座位卡</button>
-            </form>
-
-            <div class="bullet-container" id="bulletBox" style="width:100%;">
-                <div class="bullet-item" style="top: 10px; animation-delay: 0s;">祝思远与紫瑜百年好合，新婚快乐！</div>
-                <div class="bullet-item" style="top: 30px; animation-delay: 3s;">期待9月27日的经典婚礼！🎉</div>
-            </div>
-
             <div class="footer-credits">
                 ✦ SPECIAL THANKS TO ALL OUR FAMILY & FRIENDS ✦<br>
                 葛思远 & 方紫瑜 婚礼放映室<br>
@@ -408,80 +368,6 @@
 
         function addToCalendar() {
             alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");
-        }
-
-        function loadHistoryWishes() {
-            fetch("/api/wishes")
-                .then(res => res.json())
-                .then(data => {
-                    if (data.wishes && data.wishes.length > 0) {
-                        const bulletBox = document.getElementById("bulletBox");
-                        data.wishes.forEach((wish, idx) => {
-                            const newBullet = document.createElement("div");
-                            newBullet.className = "bullet-item";
-                            newBullet.style.top = (Math.random() * 20 + 10) + "px";
-                            newBullet.style.animationDelay = (idx * 2.5) + "s";
-                            newBullet.innerText = wish;
-                            bulletBox.appendChild(newBullet);
-                        });
-                    }
-                }).catch(err => console.log(err));
-        }
-        document.addEventListener("DOMContentLoaded", loadHistoryWishes);
-
-        function loadHistoryWishes() {
-            fetch("/api/wishes")
-                .then(res => res.json())
-                .then(data => {
-                    if (data.wishes && data.wishes.length > 0) {
-                        const bulletBox = document.getElementById("bulletBox");
-                        data.wishes.forEach((wish, idx) => {
-                            const newBullet = document.createElement("div");
-                            newBullet.className = "bullet-item";
-                            newBullet.style.top = (Math.random() * 20 + 10) + "px";
-                            newBullet.style.animationDelay = (idx * 2.5) + "s";
-                            newBullet.innerText = wish;
-                            bulletBox.appendChild(newBullet);
-                        });
-                    }
-                }).catch(err => console.log(err));
-        }
-        document.addEventListener("DOMContentLoaded", loadHistoryWishes);
-
-        function submitRSVP(e) {
-            e.preventDefault();
-            const name = document.getElementById('guestName').value;
-            const attend = document.getElementById('guestAttend').value;
-            const count = document.getElementById('guestCount').value;
-            const wish = document.getElementById('wishInput').value;
-            const btnSubmit = document.getElementById('btnSubmit');
-
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "正在提交，请稍候...";
-
-            fetch('/api/rsvp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ source: '女方请柬', name, attend, count, wish })
-            }).then(res => res.json()).then(data => {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "确认提交并生成专属座位卡";
-
-                if (wish) {
-                    const bulletBox = document.getElementById('bulletBox');
-                    const newBullet = document.createElement('div');
-                    newBullet.className = 'bullet-item';
-                    newBullet.style.top = Math.random() * 20 + 10 + 'px';
-                    newBullet.style.animationDelay = '0s';
-                    newBullet.innerText = wish;
-                    bulletBox.appendChild(newBullet);
-                }
-                alert("感谢您的确认与祝福！已为您生成专属座位卡！");
-            }).catch(err => {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "确认提交并生成专属座位卡";
-                alert("提交成功！感谢您的确认与祝福！");
-            });
         }
     </script>
 </body>
