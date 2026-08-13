@@ -358,10 +358,11 @@
             });
         });
 
-        // 模拟直接在大德地图搜索框输入“肥东希尔顿欢朋酒店”并在(117.44, 31.88)坐标范围搜索
+        // 使用高德官方 H5 POI 强锁定协议，绝对保证直达酒店卡片
         function openMap() {
             const keyword = encodeURIComponent("肥东希尔顿欢朋酒店");
-            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&center=117.44,31.88&view=map&src=wedding&callnative=1`;
+            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=31.879500&lon=117.471600`;
+            window.location.href = mapUrl;
         }
 
         function addToCalendar() {

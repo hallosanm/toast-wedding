@@ -109,7 +109,7 @@
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
 
         .ending-scroll-page { height: auto; min-height: 100vh; padding: 40px 20px; background: var(--bg-color); }
-        
+
         .ticket-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -244,7 +244,7 @@
             <div class="swipe-hint">下滑查看婚礼信息 ↓</div>
         </section>
 
-        <!-- 结尾页：男方婚礼信息 + 门票 + RSVP -->
+        <!-- 结尾页：女方婚礼信息 + 门票 + RSVP -->
         <section class="section-page ending-scroll-page">
             <div class="quad-card" style="margin-bottom: 20px;">
                 <div class="act-tag">SPECIAL INVITATION</div>
@@ -257,13 +257,13 @@
             <div class="ticket-box">
                 <div class="ticket-head">
                     <div class="ticket-title">ADMIT ONE ✦ 婚礼门票</div>
-                    <div class="ticket-date-badge">2026.09.19</div>
+                    <div class="ticket-date-badge">2026.09.27</div>
                 </div>
                 <div class="ticket-row"><span class="ticket-label">新郎 GROOM:</span> <span class="ticket-value-highlight">葛思远</span></div>
                 <div class="ticket-row"><span class="ticket-label">新娘 BRIDE:</span> <span class="ticket-value-highlight">方紫瑜</span></div>
-                <div class="ticket-row"><span class="ticket-label">吉时 TIME:</span> <span class="ticket-value-highlight">2026年9月19日 11:38</span></div>
-                <div class="ticket-row"><span class="ticket-label">地点 VENUE:</span> <span class="ticket-value-highlight">肥东希尔顿欢朋酒店-亚特兰蒂斯厅</span></div>
-                <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省肥东县长江东路与金阳路交叉口（地铁2号线桂王站A口出）</span></div>
+                <div class="ticket-row"><span class="ticket-label">吉时 TIME:</span> <span class="ticket-value-highlight">2026年9月27日 11:38</span></div>
+                <div class="ticket-row"><span class="ticket-label">地点 VENUE:</span> <span class="ticket-value-highlight">旌德海螺国际大酒店</span></div>
+                <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省旌德县江村大道1号</span></div>
 
                 <div class="action-btns">
                     <a class="btn-action btn-primary" onclick="openMap()">📍 一键地图导航</a>
@@ -300,13 +300,13 @@
 
             <div class="bullet-container" id="bulletBox" style="width:100%;">
                 <div class="bullet-item" style="top: 10px; animation-delay: 0s;">祝思远与紫瑜百年好合，新婚快乐！</div>
-                <div class="bullet-item" style="top: 30px; animation-delay: 3s;">期待9月19日的经典婚礼！🎉</div>
+                <div class="bullet-item" style="top: 30px; animation-delay: 3s;">期待9月27日的经典婚礼！🎉</div>
             </div>
 
             <div class="footer-credits">
                 ✦ SPECIAL THANKS TO ALL OUR FAMILY & FRIENDS ✦<br>
                 葛思远 & 方紫瑜 婚礼放映室<br>
-                2026.09.19
+                2026.09.27
             </div>
         </section>
 
@@ -358,14 +358,15 @@
             });
         });
 
-        // 模拟直接在大德地图搜索框输入“肥东希尔顿欢朋酒店”并在(117.44, 31.88)坐标范围搜索
+        // 使用高德官方 H5 POI 强锁定协议，绝对保证直达酒店卡片
         function openMap() {
-            const keyword = encodeURIComponent("肥东希尔顿欢朋酒店");
-            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&center=117.44,31.88&view=map&src=wedding&callnative=1`;
+            const keyword = encodeURIComponent("旌德海螺国际大酒店");
+            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=30.289100&lon=118.536900`;
+            window.location.href = mapUrl;
         }
 
         function addToCalendar() {
-            alert("已为您生成日历事件提示：\n【葛思远 & 方紫瑜 婚礼】\n时间：2026年9月19日 11:38\n地点：肥东希尔顿欢朋酒店-亚特兰蒂斯厅");
+            alert("已为您生成日历事件提示：\n【葛思远 & 方紫瑜 婚礼】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");
         }
 
         function submitRSVP(e) {
