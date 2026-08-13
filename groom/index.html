@@ -358,10 +358,12 @@
             });
         });
 
-        // 模拟直接在大德地图搜索框输入“肥东希尔顿欢朋酒店”并在(117.44, 31.88)坐标范围搜索
+        // 单点标记标注模式（非列表模式），直接在地图中心显示唯一点卡片
         function openMap() {
-            const keyword = encodeURIComponent("肥东希尔顿欢朋酒店");
-            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&center=117.44,31.88&view=map&src=wedding&callnative=1`;
+            const lng = 117.44;
+            const lat = 31.88;
+            const name = encodeURIComponent("肥东希尔顿欢朋酒店");
+            window.location.href = `https://uri.amap.com/marker?position=${lng},${lat}&name=${name}&src=wedding&coordinate=gaode&callnative=1`;
         }
 
         function addToCalendar() {
