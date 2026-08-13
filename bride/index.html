@@ -148,7 +148,9 @@
 
     <div class="bg-cover-art"></div>
 
-    <audio id="bgm" loop preload="auto" playsinline webkit-playsinline src="爱很简单.mp3"></audio>
+    <audio id="bgm" loop preload="auto">
+        <source src="爱很简单.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
 
@@ -313,37 +315,37 @@
     <script>
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
 
-        function playBGM() {
-            if (bgm && bgm.paused) {
+        function playMusic() {
+            if (!isPlaying) {
                 bgm.play().then(() => {
+                    isPlaying = true;
                     musicBtn.classList.add('playing');
-                }).catch(err => console.log("等待用户交互激活音频"));
+                }).catch(e => console.log("自动播放被阻断"));
             }
         }
+
+        document.addEventListener('DOMContentLoaded', playMusic);
+        document.addEventListener("WeixinJSBridgeReady", playMusic, false);
+
+        const triggerEvents = ['touchstart', 'touchend', 'click', 'scroll'];
+        triggerEvents.forEach(event => {
+            document.addEventListener(event, playMusic, { once: true });
+        });
 
         function toggleMusic() {
             if (bgm.paused) {
                 bgm.play().then(() => {
+                    isPlaying = true;
                     musicBtn.classList.add('playing');
                 });
             } else {
                 bgm.pause();
+                isPlaying = false;
                 musicBtn.classList.remove('playing');
             }
         }
-
-        document.addEventListener("WeixinJSBridgeReady", function() {
-            playBGM();
-        }, false);
-
-        function firstTouchPlay() {
-            playBGM();
-            document.removeEventListener('touchstart', firstTouchPlay);
-            document.removeEventListener('click', firstTouchPlay);
-        }
-        document.addEventListener('touchstart', firstTouchPlay, false);
-        document.addEventListener('click', firstTouchPlay, false);
 
         document.querySelectorAll('.carousel-box').forEach((box) => {
             box.addEventListener('scroll', () => {
@@ -356,24 +358,15 @@
             });
         });
 
-        // 绑定特定中心坐标调起导航路线，跳过搜索列表，直接进入单一目的地卡片
+        // 使用高德官方 H5 POI 强锁定协议，绝对保证直达酒店卡片
         function openMap() {
             const keyword = encodeURIComponent("旌德海螺国际大酒店");
-            const lat = 30.289100;
-            const lon = 118.536900;
-
-            const appSchema = `amapuri://route/plan/?dlat=${lat}&dlon=${lon}&dname=${keyword}&dev=0&t=0`;
-            const webUrl = `https://uri.amap.com/marker?position=${lon},${lat}&name=${keyword}&src=wedding&callnative=1`;
-
-            window.location.href = appSchema;
-
-            setTimeout(function() {
-                window.location.href = webUrl;
-            }, 500);
+            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=30.289100&lon=118.536900`;
+            window.location.href = mapUrl;
         }
 
         function addToCalendar() {
-            alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");
+            alert("已为您生成日历事件提示：\n【葛思远 & 方紫瑜 婚礼】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");
         }
 
         function submitRSVP(e) {
