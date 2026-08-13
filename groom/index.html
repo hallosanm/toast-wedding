@@ -358,12 +358,16 @@
             });
         });
 
+        // 优化高德/百度地图聚合跳转，精准高亮酒店位置
         function openMap() {
-            const destination = "肥东希尔顿欢朋酒店";
+            const name = encodeURIComponent("肥东希尔顿欢朋酒店");
+            const address = encodeURIComponent("安徽省肥东县长江东路与金阳路交叉口");
             const lat = 31.879500;
             const lng = 117.471600;
-            const mapUrl = `https://uri.amap.com/marker?coordinate=${lng},${lat}&name=${encodeURIComponent(destination)}&src=wedding&callnative=1`;
-            window.location.href = mapUrl;
+            
+            // 采用精准坐标 + 气泡标注协议，避免降级定位到当前位置
+            const amapUrl = `https://uri.amap.com/marker?coordinate=${lng},${lat}&name=${name}&src=wedding&callnative=1`;
+            window.location.href = amapUrl;
         }
 
         function addToCalendar() {
