@@ -356,11 +356,14 @@
             });
         });
 
-        // 优先调起高德地图 APP 执行全屏关键词搜索（像在手机高德里搜索一样）；未安装时自动切换 Web 端
+        // 绑定特定中心坐标调起导航路线，跳过搜索列表，直接进入单一目的地卡片
         function openMap() {
             const keyword = encodeURIComponent("旌德海螺国际大酒店");
-            const appSchema = `amapuri://poi/keywords?keywords=${keyword}`;
-            const webUrl = `https://uri.amap.com/search?keyword=${keyword}&center=118.536900,30.289100&view=map&zoom=16&src=wedding&callnative=1`;
+            const lat = 30.289100;
+            const lon = 118.536900;
+
+            const appSchema = `amapuri://route/plan/?dlat=${lat}&dlon=${lon}&dname=${keyword}&dev=0&t=0`;
+            const webUrl = `https://uri.amap.com/marker?position=${lon},${lat}&name=${keyword}&src=wedding&callnative=1`;
 
             window.location.href = appSchema;
 
