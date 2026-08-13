@@ -314,19 +314,41 @@
 
     <script>
                         // ===== 旧版核心：按钮点击与交互强触发音频逻辑 =====
-        const bgm = document.getElementById('bgm');
-        const musicBtn = document.getElementById('musicBtn');
+                // ===== 完全使用旧版 (source 4) 的音乐播放设置 =====
+        const bgm = document.getElementById("bgm");
+        const musicBtn = document.getElementById("musicBtn");
+
+        window.addEventListener("DOMContentLoaded", () => {
+            bgm.play().then(() => {
+                musicBtn.classList.add("playing");
+            }).catch(e => {
+                console.log("等待点击按钮播放音乐");
+            });
+        });
+
+        document.addEventListener("WeixinJSBridgeReady", () => {
+            bgm.play().then(() => {
+                musicBtn.classList.add("playing");
+            }).catch(e => console.log("微信环境等待交互"));
+        }, false);
 
         function toggleMusic(forcePlay = false) {
             if (bgm.paused || forcePlay) {
                 bgm.play().then(() => {
-                    musicBtn.classList.add('playing');
-                }).catch(e => console.log("等待用户点击按钮播放", e));
+                    musicBtn.classList.add("playing");
+                }).catch(e => console.log("Audio play error"));
             } else {
                 bgm.pause();
-                musicBtn.classList.remove('playing');
+                musicBtn.classList.remove("playing");
             }
         }
+
+        const triggerEvents = ["touchstart", "touchend", "click", "scroll"];
+        function playOnInteraction() {
+            toggleMusic(true);
+            triggerEvents.forEach(evt => document.removeEventListener(evt, playOnInteraction, true));
+        }
+        triggerEvents.forEach(evt => document.addEventListener(evt, playOnInteraction, true));
 
         document.addEventListener('DOMContentLoaded', () => {
             bgm.play().then(() => {
