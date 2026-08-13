@@ -264,8 +264,8 @@
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省肥东县长江东路与金阳路交叉口（地铁2号线桂王站A口出）</span></div>
 
                 <div class="action-btns">
-                    <!-- 使用高德搜索 API 动态定位酒店名称并展现第一条路线 -->
-                    <a class="btn-action btn-primary" href="https://m.amap.com/search/mapview/keywords=%E5%90%88%E8%82%A5%E8%82%A5%E4%B8%9C%E5%B8%8C%E2%84%82%E9%A1%BF%E6%AC%A2%E6%9C%8B%E9%85%92%E5%BA%97" target="_blank" onclick="openMap('合肥肥东希尔顿欢朋酒店'); return false;">📍 一键地图导航</a>
+                    <!-- 使用高德标准 search URI 进行动态搜索并直接展开首条结果 -->
+                    <a class="btn-action btn-primary" onclick="openMap('合肥肥东希尔顿欢朋酒店')">📍 一键地图导航</a>
                     <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
             </div>
@@ -375,10 +375,10 @@
             });
         });
 
-        // 动态使用高德地图搜索并调起/展示第一个搜索结果
+        // 强效调起高德精准搜索与地图展示（带 view=map 参数）
         function openMap(hotelName) {
             const encodedName = encodeURIComponent(hotelName);
-            window.location.href = `https://m.amap.com/search/mapview/keywords=${encodedName}`;
+            window.location.href = `https://uri.amap.com/search?keyword=${encodedName}&view=map&src=wedding&callnative=1`;
         }
 
         function addToCalendar() {
