@@ -264,8 +264,8 @@
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省旌德县江村大道1号</span></div>
 
                 <div class="action-btns">
-                    <!-- 优化后的高德精准标注与 App 唤醒 URI -->
-                    <a class="btn-action btn-primary" href="https://uri.amap.com/marker?position=118.536900,30.289100&name=%E6%97%8C%E5%BE%B7%E6%B5%B7%E8%9D%BA%E5%9B%BD%E9%99%85%E5%A4%A7%E9%85%92%E5%BA%97&src=wedding&coordinate=gaode&callnative=1" target="_blank">📍 一键地图导航</a>
+                    <!-- 使用高德搜索 API 动态定位酒店名称并展现第一条路线 -->
+                    <a class="btn-action btn-primary" href="https://m.amap.com/search/mapview/keywords=%E6%97%8C%E5%BE%B7%E6%B5%B7%E8%9D%BA%E5%9B%BD%E9%99%85%E5%A4%A7%E9%85%92%E5%BA%97" target="_blank" onclick="openMap('旌德海螺国际大酒店'); return false;">📍 一键地图导航</a>
                     <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
             </div>
@@ -374,6 +374,12 @@
                 });
             });
         });
+
+        // 动态使用高德地图搜索并调起/展示第一个搜索结果
+        function openMap(hotelName) {
+            const encodedName = encodeURIComponent(hotelName);
+            window.location.href = `https://m.amap.com/search/mapview/keywords=${encodedName}`;
+        }
 
         function addToCalendar() {
             alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");

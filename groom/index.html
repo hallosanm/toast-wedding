@@ -260,12 +260,12 @@
                 <div class="ticket-row"><span class="ticket-label">新郎 GROOM:</span> <span class="ticket-value-highlight">葛思远</span></div>
                 <div class="ticket-row"><span class="ticket-label">新娘 BRIDE:</span> <span class="ticket-value-highlight">方紫瑜</span></div>
                 <div class="ticket-row"><span class="ticket-label">吉时 TIME:</span> <span class="ticket-value-highlight">2026年9月19日 11:38</span></div>
-                <div class="ticket-row"><span class="ticket-label">地点 VENUE:</span> <span class="ticket-value-highlight">肥东希尔顿欢朋酒店-亚特兰蒂斯厅</span></div>
+                <div class="ticket-row"><span class="ticket-label">地点 VENUE:</span> <span class="ticket-value-highlight">合肥肥东希尔顿欢朋酒店-亚特兰蒂斯厅</span></div>
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省肥东县长江东路与金阳路交叉口（地铁2号线桂王站A口出）</span></div>
 
                 <div class="action-btns">
-                    <!-- 优化后的高德精准标注与 App 唤醒 URI -->
-                    <a class="btn-action btn-primary" href="https://uri.amap.com/marker?position=117.471600,31.879500&name=%E8%82%A5%E4%B8%9C%E5%B8%8C%E2%84%82%E9%A1%BF%E6%AC%A2%E6%9C%8B%E9%85%92%E5%BA%97&src=wedding&coordinate=gaode&callnative=1" target="_blank">📍 一键地图导航</a>
+                    <!-- 使用高德搜索 API 动态定位酒店名称并展现第一条路线 -->
+                    <a class="btn-action btn-primary" href="https://m.amap.com/search/mapview/keywords=%E5%90%88%E8%82%A5%E8%82%A5%E4%B8%9C%E5%B8%8C%E2%84%82%E9%A1%BF%E6%AC%A2%E6%9C%8B%E9%85%92%E5%BA%97" target="_blank" onclick="openMap('合肥肥东希尔顿欢朋酒店'); return false;">📍 一键地图导航</a>
                     <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
             </div>
@@ -375,8 +375,14 @@
             });
         });
 
+        // 动态使用高德地图搜索并调起/展示第一个搜索结果
+        function openMap(hotelName) {
+            const encodedName = encodeURIComponent(hotelName);
+            window.location.href = `https://m.amap.com/search/mapview/keywords=${encodedName}`;
+        }
+
         function addToCalendar() {
-            alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月19日 11:38\n地点：肥东希尔顿欢朋酒店-亚特兰蒂斯厅");
+            alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月19日 11:38\n地点：合肥肥东希尔顿欢朋酒店-亚特兰蒂斯厅");
         }
 
         function submitRSVP(e) {
