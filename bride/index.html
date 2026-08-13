@@ -147,11 +147,9 @@
 
     <div class="bg-cover-art"></div>
 
-    <audio id="bgm" loop preload="auto" playsinline webkit-playsinline>
-        <source src="爱很简单.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgm" loop preload="auto" playsinline webkit-playsinline src="爱很简单.mp3"></audio>
 
-    <div class="music-btn" id="musicBtn" onclick="toggleMusic(event)">🎵</div>
+    <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
 
     <div class="app-container" id="appContainer">
         
@@ -313,48 +311,37 @@
     <script>
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
-        let isPlaying = false;
 
-        function forcePlay() {
-            if (!isPlaying && bgm) {
+        function playBGM() {
+            if (bgm && bgm.paused) {
                 bgm.play().then(() => {
-                    isPlaying = true;
                     musicBtn.classList.add('playing');
-                    removeTouchListeners();
-                }).catch(err => console.log("等待手势激活音频:", err));
+                }).catch(err => console.log("自动播放限制：等待用户交互"));
             }
         }
 
-        function removeTouchListeners() {
-            ['touchstart', 'touchend', 'click', 'pointerdown'].forEach(evt => {
-                document.removeEventListener(evt, forcePlay);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', forcePlay);
-        document.addEventListener("WeixinJSBridgeReady", function() {
-            if (typeof WeixinJSBridge !== 'undefined') {
-                WeixinJSBridge.invoke('getNetworkType', {}, function() { forcePlay(); });
-            }
-        }, false);
-
-        ['touchstart', 'touchend', 'click', 'pointerdown'].forEach(evt => {
-            document.addEventListener(evt, forcePlay, { once: true });
-        });
-
-        function toggleMusic(e) {
-            if (e) e.stopPropagation();
+        function toggleMusic() {
             if (bgm.paused) {
                 bgm.play().then(() => {
-                    isPlaying = true;
                     musicBtn.classList.add('playing');
                 });
             } else {
                 bgm.pause();
-                isPlaying = false;
                 musicBtn.classList.remove('playing');
             }
         }
+
+        document.addEventListener("WeixinJSBridgeReady", function() {
+            playBGM();
+        }, false);
+
+        function firstTouchPlay() {
+            playBGM();
+            document.removeEventListener('touchstart', firstTouchPlay);
+            document.removeEventListener('click', firstTouchPlay);
+        }
+        document.addEventListener('touchstart', firstTouchPlay, false);
+        document.addEventListener('click', firstTouchPlay, false);
 
         document.querySelectorAll('.carousel-box').forEach((box) => {
             box.addEventListener('scroll', () => {
@@ -367,10 +354,10 @@
             });
         });
 
-        // 使用高德官方坐标点标协议，确保 100% 精准弹出酒店气泡标记
+        // 女方高德 H5 搜索/标注 API 强制跳转链接
         function openMap() {
-            const name = encodeURIComponent("旌德海螺国际大酒店");
-            const mapUrl = `https://uri.amap.com/marker?position=118.536900,30.289100&name=${name}&src=wedding&callnative=1`;
+            const keyword = encodeURIComponent("旌德海螺国际大酒店");
+            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=30.289100&lon=118.536900`;
             window.location.href = mapUrl;
         }
 
