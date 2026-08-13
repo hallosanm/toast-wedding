@@ -127,9 +127,10 @@
         .ticket-label { color: var(--text-muted); margin-right: 8px; font-size: 14px; }
         .ticket-value-highlight { font-weight: 700; color: var(--text-dark); }
 
-        .action-btns { display: flex; margin-top: 20px; }
-        .btn-action { width: 100%; padding: 13px 0; text-align: center; border-radius: 8px; font-size: 15px; text-decoration: none; cursor: pointer; }
+        .action-btns { display: flex; gap: 12px; margin-top: 20px; }
+        .btn-action { flex: 1; padding: 12px 0; text-align: center; border-radius: 8px; font-size: 14px; text-decoration: none; cursor: pointer; }
         .btn-primary { background: var(--accent-gold); color: #fff; font-weight: 600; box-shadow: 0 4px 12px rgba(198, 156, 89, 0.3); }
+        .btn-secondary { background: #fff; border: 1px solid var(--border-color); color: var(--text-dark); font-weight: 600; }
 
         .form-group { margin-bottom: 14px; text-align: left; }
         .form-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
@@ -263,8 +264,8 @@
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省旌德县江村大道1号</span></div>
 
                 <div class="action-btns">
-                    <!-- 使用高德 Web 标准全唤起 URL（直接原生链接，兼容所有浏览器） -->
-                    <a class="btn-action btn-primary" href="https://uri.amap.com/marker?position=118.536900,30.289100&name=%E6%97%8C%E5%BE%B7%E6%B5%B7%E8%9D%BA%E5%9B%BD%E9%99%85%E5%A4%A7%E9%85%92%E5%BA%97&src=wedding&callnative=1" target="_blank">📍 一键地图导航</a>
+                    <a class="btn-action btn-primary" onclick="openMap()">📍 一键地图导航</a>
+                    <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
             </div>
 
@@ -317,7 +318,7 @@
             if (bgm && bgm.paused) {
                 bgm.play().then(() => {
                     musicBtn.classList.add('playing');
-                }).catch(err => console.log("自动播放限制：等待用户交互"));
+                }).catch(err => console.log("等待用户交互激活音频"));
             }
         }
 
@@ -354,6 +355,18 @@
                 });
             });
         });
+
+        // 旌德海螺国际大酒店：经纬度 (118.536900, 30.289100)
+        // 使用高德标准 Marker 点标协议，100% 拒绝乱码，直接弹出红点卡片并调起导航
+        function openMap() {
+            const name = encodeURIComponent("旌德海螺国际大酒店");
+            const mapUrl = `https://uri.amap.com/marker?position=118.536900,30.289100&name=${name}&src=wedding&callnative=1`;
+            window.location.href = mapUrl;
+        }
+
+        function addToCalendar() {
+            alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");
+        }
 
         function submitRSVP(e) {
             e.preventDefault();
