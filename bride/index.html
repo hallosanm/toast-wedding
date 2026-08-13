@@ -358,10 +358,12 @@
             });
         });
 
-        // 优化方案：改用高德官方 ditu.amap.com 标准 H5 搜索链接，无缝直达，不经过 nav1 拦截页
+        // 强锁定 Marker 协议：直接在网页中呈现酒店标注与路线卡片，禁用强制调起 APP 拦截页 (callnative=0)
         function openMap() {
-            const keyword = encodeURIComponent("旌德海螺国际大酒店");
-            window.location.href = `https://ditu.amap.com/search?query=${keyword}`;
+            const lng = 118.548480;
+            const lat = 30.291750;
+            const name = encodeURIComponent("旌德海螺国际大酒店");
+            window.location.href = `https://uri.amap.com/marker?position=${lng},${lat}&name=${name}&coordinate=gaode&callnative=0`;
         }
 
         function addToCalendar() {
