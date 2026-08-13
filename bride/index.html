@@ -410,6 +410,25 @@
             alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");
         }
 
+        function loadHistoryWishes() {
+            fetch("/api/wishes")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.wishes && data.wishes.length > 0) {
+                        const bulletBox = document.getElementById("bulletBox");
+                        data.wishes.forEach((wish, idx) => {
+                            const newBullet = document.createElement("div");
+                            newBullet.className = "bullet-item";
+                            newBullet.style.top = (Math.random() * 20 + 10) + "px";
+                            newBullet.style.animationDelay = (idx * 2.5) + "s";
+                            newBullet.innerText = wish;
+                            bulletBox.appendChild(newBullet);
+                        });
+                    }
+                }).catch(err => console.log(err));
+        }
+        document.addEventListener("DOMContentLoaded", loadHistoryWishes);
+
         function submitRSVP(e) {
             e.preventDefault();
             const name = document.getElementById('guestName').value;
@@ -421,7 +440,6 @@
             btnSubmit.disabled = true;
             btnSubmit.innerText = "正在提交，请稍候...";
 
-            // 提交给服务器后端保存到 Excel 表格
             fetch('/api/rsvp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
