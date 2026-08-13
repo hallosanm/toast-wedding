@@ -422,7 +422,7 @@
             btnSubmit.innerText = "正在提交，请稍候...";
 
             // 提交给服务器后端保存到 Excel 表格
-            fetch('http://118.31.11.1:3000/api/rsvp', {
+            fetch('/api/rsvp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ source: '男方请柬', name, attend, count, wish })
