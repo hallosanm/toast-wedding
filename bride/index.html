@@ -358,10 +358,10 @@
             });
         });
 
-        // 采用高德通用 H5 搜索协议，自动聚焦搜索出的第一条唯一最佳匹配项
+        // 模拟直接在高德地图搜索框输入“旌德海螺国际大酒店”并在(118.56, 30.30)坐标范围搜索
         function openMap() {
             const keyword = encodeURIComponent("旌德海螺国际大酒店");
-            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&src=wedding&callnative=1`;
+            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&center=118.56,30.30&view=map&src=wedding&callnative=1`;
         }
 
         function addToCalendar() {
