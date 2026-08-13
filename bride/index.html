@@ -358,16 +358,11 @@
             });
         });
 
-        // 优化高德/百度地图聚合跳转，精准高亮酒店位置
+        // 使用高德官方 H5 POI 强锁定协议，绝对保证直达酒店卡片
         function openMap() {
-            const name = encodeURIComponent("旌德海螺国际大酒店");
-            const address = encodeURIComponent("安徽省旌德县江村大道1号");
-            const lat = 30.289100;
-            const lng = 118.536900;
-            
-            // 采用精准坐标 + 气泡标注协议，避免降级定位到当前位置
-            const amapUrl = `https://uri.amap.com/marker?coordinate=${lng},${lat}&name=${name}&src=wedding&callnative=1`;
-            window.location.href = amapUrl;
+            const keyword = encodeURIComponent("旌德海螺国际大酒店");
+            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=30.289100&lon=118.536900`;
+            window.location.href = mapUrl;
         }
 
         function addToCalendar() {
