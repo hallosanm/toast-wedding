@@ -356,11 +356,19 @@
             });
         });
 
-        // 结合关键词、精准经纬度中心点 (center) 与高清缩放级别 (zoom)，直接把地图视角放大并聚焦在酒店位置
+        // 优先调起高德地图 APP 执行全屏关键词搜索（像在手机高德里搜索一样，卡片、路线、打车一应俱全）；未安装时自动切换 Web 端
         function openMap() {
             const keyword = encodeURIComponent("合肥肥东希尔顿欢朋酒店");
-            const mapUrl = `https://uri.amap.com/search?keyword=${keyword}&center=117.471600,31.879500&view=map&zoom=16&src=wedding&callnative=1`;
-            window.location.href = mapUrl;
+            const appSchema = `amapuri://poi/keywords?keywords=${keyword}`;
+            const webUrl = `https://uri.amap.com/search?keyword=${keyword}&center=117.471600,31.879500&view=map&zoom=16&src=wedding&callnative=1`;
+
+            // 尝试唤醒高德地图 App
+            window.location.href = appSchema;
+
+            // 如果未安装 APP 或在微信拦截下，降级切换到网页版 POI 搜索视图
+            setTimeout(function() {
+                window.location.href = webUrl;
+            }, 500);
         }
 
         function addToCalendar() {
