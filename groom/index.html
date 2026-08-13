@@ -321,9 +321,7 @@
                     isPlaying = true;
                     musicBtn.classList.add('playing');
                     removeTouchListeners();
-                }).catch(err => {
-                    console.log("等待首次手势激活音频:", err);
-                });
+                }).catch(err => console.log("等待手势激活音频:", err));
             }
         }
 
@@ -333,22 +331,17 @@
             });
         }
 
-        // 1. 尝试自动播放及微信环境下原生唤起
         document.addEventListener('DOMContentLoaded', forcePlay);
         document.addEventListener("WeixinJSBridgeReady", function() {
             if (typeof WeixinJSBridge !== 'undefined') {
-                WeixinJSBridge.invoke('getNetworkType', {}, function() {
-                    forcePlay();
-                });
+                WeixinJSBridge.invoke('getNetworkType', {}, function() { forcePlay(); });
             }
         }, false);
 
-        // 2. 全屏捕捉用户首次触摸/点击事件触发音频
         ['touchstart', 'touchend', 'click', 'pointerdown'].forEach(evt => {
             document.addEventListener(evt, forcePlay, { once: true });
         });
 
-        // 3. 顶部 🎵 按钮手动切换
         function toggleMusic(e) {
             if (e) e.stopPropagation();
             if (bgm.paused) {
@@ -374,9 +367,10 @@
             });
         });
 
+        // 使用高德官方坐标点标协议，确保 100% 精准弹出酒店气泡标记
         function openMap() {
-            const keyword = encodeURIComponent("肥东希尔顿欢朋酒店");
-            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=31.879500&lon=117.471600`;
+            const name = encodeURIComponent("肥东希尔顿欢朋酒店");
+            const mapUrl = `https://uri.amap.com/marker?position=117.471600,31.879500&name=${name}&src=wedding&callnative=1`;
             window.location.href = mapUrl;
         }
 
