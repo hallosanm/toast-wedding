@@ -264,8 +264,7 @@
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省肥东县长江东路与金阳路交叉口（地铁2号线桂王站A口出）</span></div>
 
                 <div class="action-btns">
-                    <!-- 指定的高德 H5 搜索/标注 API 链接 (男方) -->
-                    <a class="btn-action btn-primary" href="https://m.amap.com/search/mapview/keywords=%E8%82%A5%E4%B8%9C%E5%B8%8C%E2%84%82%E9%A1%BF%E6%AC%A2%E6%9C%8B%E9%85%92%E5%BA%97&lat=31.879500&lon=117.471600" target="_blank">📍 一键地图导航</a>
+                    <a class="btn-action btn-primary" onclick="openMap()">📍 一键地图导航</a>
                     <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
             </div>
@@ -319,7 +318,7 @@
             if (bgm && bgm.paused) {
                 bgm.play().then(() => {
                     musicBtn.classList.add('playing');
-                }).catch(err => console.log("自动播放限制：等待用户交互"));
+                }).catch(err => console.log("等待用户交互激活音频"));
             }
         }
 
@@ -356,6 +355,13 @@
                 });
             });
         });
+
+        // 动态使用 JS encodeURIComponent，杜绝乱码并精准唤起高德地图
+        function openMap() {
+            const keyword = encodeURIComponent("肥东希尔顿欢朋酒店");
+            const mapUrl = `https://m.amap.com/search/mapview/keywords=${keyword}&lat=31.879500&lon=117.471600`;
+            window.location.href = mapUrl;
+        }
 
         function addToCalendar() {
             alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月19日 11:38\n地点：肥东希尔顿欢朋酒店-亚特兰蒂斯厅");
