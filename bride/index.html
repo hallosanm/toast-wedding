@@ -148,9 +148,7 @@
 
     <div class="bg-cover-art"></div>
 
-    <audio id="bgm" loop preload="auto">
-        <source src="爱很简单.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgm" loop preload="auto" playsinline webkit-playsinline src="爱很简单.mp3"></audio>
 
     <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
 
@@ -266,7 +264,7 @@
                 <div class="ticket-row"><span class="ticket-label">地址 ADD:</span> <span class="ticket-value-highlight">安徽省旌德县江村大道1号</span></div>
 
                 <div class="action-btns">
-                    <a class="btn-action btn-primary" onclick="openMap()">📍 一键地图导航</a>
+                    <a class="btn-action btn-primary" href="https://m.amap.com/search/mapview/keywords=%E6%97%8C%E5%BE%B7%E6%B5%B7%E8%9D%BA%E5%9B%BD%E9%99%85%E5%A4%A7%E9%85%92%E5%BA%97&lat=30.289100&lon=118.536900" target="_blank">📍 一键地图导航</a>
                     <a class="btn-action btn-secondary" onclick="addToCalendar()">📅 存入系统日历</a>
                 </div>
             </div>
@@ -313,72 +311,44 @@
     </div>
 
     <script>
-                        // ===== 旧版核心：按钮点击与交互强触发音频逻辑 =====
-                // ===== 完全使用旧版 (source 4) 的音乐播放设置 =====
-        const bgm = document.getElementById("bgm");
-        const musicBtn = document.getElementById("musicBtn");
+        const bgm = document.getElementById('bgm');
+        const musicBtn = document.getElementById('musicBtn');
 
-        window.addEventListener("DOMContentLoaded", () => {
-            bgm.play().then(() => {
-                musicBtn.classList.add("playing");
-            }).catch(e => {
-                console.log("等待点击按钮播放音乐");
-            });
-        });
-
-        document.addEventListener("WeixinJSBridgeReady", () => {
-            bgm.play().then(() => {
-                musicBtn.classList.add("playing");
-            }).catch(e => console.log("微信环境等待交互"));
-        }, false);
-
+        // 切换播放/暂停函数
         function toggleMusic(forcePlay = false) {
             if (bgm.paused || forcePlay) {
                 bgm.play().then(() => {
-                    musicBtn.classList.add("playing");
-                }).catch(e => console.log("Audio play error"));
-            } else {
-                bgm.pause();
-                musicBtn.classList.remove("playing");
-            }
-        }
-
-        const triggerEvents = ["touchstart", "touchend", "click", "scroll"];
-        function playOnInteraction() {
-            toggleMusic(true);
-            triggerEvents.forEach(evt => document.removeEventListener(evt, playOnInteraction, true));
-        }
-        triggerEvents.forEach(evt => document.addEventListener(evt, playOnInteraction, true));
-
-        document.addEventListener('DOMContentLoaded', () => {
-            bgm.play().then(() => {
-                musicBtn.classList.add('playing');
-            }).catch(e => console.log("等待点击页面唤醒音频"));
-        });
-
-        document.addEventListener("WeixinJSBridgeReady", () => {
-            bgm.play().then(() => {
-                musicBtn.classList.add('playing');
-            }).catch(e => console.log("微信环境静默触发"));
-        }, false);
-
-        const userEvents = ['touchstart', 'touchend', 'click', 'scroll'];
-        function forcePlayOnUserAction() {
-            if (bgm.paused) {
-                bgm.play().then(() => {
                     musicBtn.classList.add('playing');
-                }).catch(e => console.log(e));
-            }
-            userEvents.forEach(evt => document.removeEventListener(evt, forcePlayOnUserAction, true));
-        }
-        userEvents.forEach(evt => document.addEventListener(evt, forcePlayOnUserAction, true)););
+                }).catch(e => console.log("Audio play deferred until user gesture"));
             } else {
                 bgm.pause();
-                isPlaying = false;
                 musicBtn.classList.remove('playing');
             }
         }
 
+        // 1. 页面加载完成尝试自动播放
+        document.addEventListener("DOMContentLoaded", () => {
+            bgm.play().then(() => {
+                musicBtn.classList.add('playing');
+            }).catch(e => console.log("等待交互唤醒音乐"));
+        });
+
+        // 2. 微信内置浏览器 API 静默唤醒
+        document.addEventListener("WeixinJSBridgeReady", function() {
+            toggleMusic(true);
+        }, false);
+
+        // 3. 用户首次任意触摸/点击/滑动页面时唤醒播放
+        const triggerEvents = ["touchstart", "touchend", "click", "scroll"];
+        function playOnInteraction() {
+            if (bgm.paused) {
+                toggleMusic(true);
+            }
+            triggerEvents.forEach(evt => document.removeEventListener(evt, playOnInteraction, true));
+        }
+        triggerEvents.forEach(evt => document.addEventListener(evt, playOnInteraction, true));
+
+        // 轮播图指示器
         document.querySelectorAll('.carousel-box').forEach((box) => {
             box.addEventListener('scroll', () => {
                 const index = Math.round(box.scrollLeft / box.clientWidth);
@@ -390,14 +360,8 @@
             });
         });
 
-        // 模拟直接在高德地图搜索框输入“旌德海螺国际大酒店”并在(118.56, 30.30)坐标范围搜索
-        function openMap() {
-            const keyword = encodeURIComponent("旌德海螺国际大酒店");
-            window.location.href = `https://uri.amap.com/search?keyword=${keyword}&center=118.56,30.30&view=map&src=wedding&callnative=1`;
-        }
-
         function addToCalendar() {
-            alert("已为您生成日历事件提示：\n【葛思远 & 方紫瑜 婚礼】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");
+            alert("已为您记录婚礼日程：\n【葛思远 & 方紫瑜 婚礼宴请】\n时间：2026年9月27日 11:38\n地点：旌德海螺国际大酒店");
         }
 
         function submitRSVP(e) {
