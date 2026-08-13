@@ -313,42 +313,56 @@
     <script>
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
+        const appContainer = document.getElementById('appContainer');
 
-        // 切换播放/暂停函数
         function toggleMusic(forcePlay = false) {
+            if (!bgm) return;
             if (bgm.paused || forcePlay) {
+                if (bgm.readyState === 0) bgm.load();
                 bgm.play().then(() => {
                     musicBtn.classList.add('playing');
-                }).catch(e => console.log("Audio play deferred until user gesture"));
+                }).catch(e => console.log("等待交互唤醒音乐", e));
             } else {
                 bgm.pause();
                 musicBtn.classList.remove('playing');
             }
         }
 
-        // 1. 页面加载完成尝试自动播放
         document.addEventListener("DOMContentLoaded", () => {
-            bgm.play().then(() => {
-                musicBtn.classList.add('playing');
-            }).catch(e => console.log("等待交互唤醒音乐"));
+            if (bgm) bgm.load();
+            toggleMusic(true);
         });
 
-        // 2. 微信内置浏览器 API 静默唤醒
-        document.addEventListener("WeixinJSBridgeReady", function() {
-            toggleMusic(true);
-        }, false);
+        function initWechatAudio() {
+            if (window.WeixinJSBridge) {
+                WeixinJSBridge.invoke('getNetworkType', {}, function () {
+                    toggleMusic(true);
+                }, false);
+            }
+        }
 
-        // 3. 用户首次任意触摸/点击/滑动页面时唤醒播放
-        const triggerEvents = ["touchstart", "touchend", "click", "scroll"];
+        if (typeof WeixinJSBridge === "undefined") {
+            document.addEventListener("WeixinJSBridgeReady", initWechatAudio, false);
+        } else {
+            initWechatAudio();
+        }
+
+        const triggerEvents = ["touchstart", "touchend", "pointerdown", "click", "scroll"];
         function playOnInteraction() {
-            if (bgm.paused) {
+            if (bgm && bgm.paused) {
                 toggleMusic(true);
             }
-            triggerEvents.forEach(evt => document.removeEventListener(evt, playOnInteraction, true));
+            triggerEvents.forEach(evt => {
+                document.removeEventListener(evt, playOnInteraction, true);
+                if (appContainer) appContainer.removeEventListener(evt, playOnInteraction, true);
+            });
         }
-        triggerEvents.forEach(evt => document.addEventListener(evt, playOnInteraction, true));
 
-        // 轮播图指示器
+        triggerEvents.forEach(evt => {
+            document.addEventListener(evt, playOnInteraction, true);
+            if (appContainer) appContainer.addEventListener(evt, playOnInteraction, true);
+        });
+
         document.querySelectorAll('.carousel-box').forEach((box) => {
             box.addEventListener('scroll', () => {
                 const index = Math.round(box.scrollLeft / box.clientWidth);
